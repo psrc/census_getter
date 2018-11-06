@@ -1,0 +1,74 @@
+####################################################################
+# PopulationSim_DataPrep Properties
+####################################################################
+
+
+
+# Census API Settings
+# ------------------------------------------------------------------
+
+# State, Counties & Year to get ACS data. Will use 5 year ACS by default. 
+state: 53
+#county_name_list = [35, 53, 61, 33]
+counties: ['035', '033', '053', '061']
+census_year: 2016
+# Must create Env Variable holding census key. Put name of Var here:
+census_key: CENSUS_KEY
+
+controls_expression_file: census_getter_expressions.csv
+
+# Tracing
+# ------------------------------------------------------------------
+#trace_geography:
+#  TAZ: 100
+#  TRACT: 10200
+
+  
+# Data Directory
+# ------------------------------------------------------------------
+data_dir: data
+
+
+
+# Output Tables
+# ------------------------------------------------------------------
+# output_tables can specify either a list of output tables to include or to skip
+# if neither is specified, then no tables will be written
+
+output_tables:
+  action: include
+  tables:
+    - all_acs
+    - combined_acs
+
+# Synthetic Population Output Specification
+# ------------------------------------------------------------------
+#
+
+output_synthetic_population:
+  household_id: household_id
+  households:
+    filename: synthetic_households.csv
+    columns:
+      - NP
+      - AGEHOH
+      - HHINCADJ
+      - NWESR
+  persons:
+    filename: synthetic_persons.csv
+    columns:
+      - per_num
+      - AGEP
+      - OSUTAG
+      - OCCP
+
+
+# Steps for base mode
+# ------------------------------------------------------------------
+run_list:
+  steps:
+    - create_controls_table
+    - write_tables
+  
+
+  #resume_after: expand_households
