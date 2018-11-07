@@ -4,7 +4,8 @@ Census getter is tool to get Census 5-year ACS data using an expression file. Th
 **Requirements:**
 1. Obtain a key from the US Census Bureau by registering at http://api.census.gov/data/key_signup.html
 2. Create an environment variable called CENSUS_KEY set to that key.
-3. Create an Anaconda environment using the file example_psrc/congifs/environment.yml.
+3. Create an [Anaconda environment](https://conda.io/docs/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) using the file example_psrc/congifs/environment.yml.
+    * `conda env create -f example_psrc\configs\environment.yml`
 4. Activate environment, navigate to census_getter/example_psrc and run run_census_getter.py.
+    * `activate popsim`
 5. Outputs located in example_psrc/output.
-
