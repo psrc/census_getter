@@ -15,7 +15,7 @@ from census_getter.census_helpers import Census
 logger = logging.getLogger(__name__)
 
 def get_acs_data(key, spec, state, county, census_year, tract=None):
-        c = c = Census(os.environ[key])
+        c = Census(os.environ[key])
 
         hh_bg_columns = get_column_names('block_group', 'household', spec)
         hh_tract_columns = get_column_names('tract', 'household', spec)

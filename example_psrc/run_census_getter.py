@@ -1,14 +1,15 @@
 import os
 import logging
 
-os.sys.path.append(r'D:\stefan\population_sim\census_getter')
-os.sys.path.append(r'D:\stefan\population_sim\census_getter\census_getter')
+# Define a root working dir for testing (where the repo is locally stored)
+working_dir = r'C:\Users\Brice'
 
-os.chdir(r'D:\stefan\population_sim\census_getter\example_psrc')
+os.sys.path.append(os.path.join(working_dir,'census_getter'))
+os.sys.path.append(os.path.join(working_dir,'census_getter/census_getter'))
+os.chdir(os.path.join(working_dir,'census_getter/example_psrc'))
 
 from activitysim.core import inject_defaults
 from census_getter import steps
-
 
 from activitysim.core import tracing
 from activitysim.core import pipeline
@@ -18,7 +19,6 @@ from activitysim.core.config import handle_standard_args
 from activitysim.core.tracing import print_elapsed_time
 
 from census_getter.util import setting
-
 
 handle_standard_args()
 
