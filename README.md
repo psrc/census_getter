@@ -15,15 +15,9 @@ Installation
     * Run 'activate census_getter' (you can re-use the environment on a later date by re-activating it or you can skip this step if you don't want to setup a new Python environment just for census_getter)
    
 4. Get and install other required libraries, which can be found online.  Run the following commands on the activated conda Python environment:
-    * conda install [pytables](http://www.pytables.org)
-    * pip install [toolz](http://toolz.readthedocs.org/en/latest)
-    * pip install [zbox](https://github.com/jiffyclub/zbox)
-    * pip install [orca](https://synthicity.github.io/orca)
-    * pip install [openmatrix](https://pypi.python.org/pypi/OpenMatrix)
     * pip install [activitysim](https://pypi.python.org/pypi/activitysim)
-    * pip install [ortools](https://github.com/google/or-tools)
     * pip install [synthpop](https://github.com/UDST/synthpop)
-    * pip install https://github.com/RSGInc/populationsim/zipball/master
+   
 
 6. Set the working_dir in the file `census_getter/example_psrc/run_census_getter.py` to the root of the cloned repository.
 
