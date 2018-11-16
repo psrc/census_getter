@@ -10,7 +10,7 @@ from activitysim.core import inject
 from activitysim.core import pipeline
 
 from census_getter.util import setting
-from census_getter.census_helpers import Census
+from synthpop.census_helpers import Census
 
 logger = logging.getLogger(__name__)
 
