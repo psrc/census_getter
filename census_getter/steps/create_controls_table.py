@@ -73,6 +73,7 @@ def create_controls(spec):
          # DataFrame from list of tuples [<target_name>, <eval results>), ...]
         variables = pd.DataFrame.from_items(variables)
         variables = variables.merge(locals_d['df'][['state','county', 'tract', 'block group']], how='left', left_index = True, right_index = True)
+        variables['block_group_id'] = variables['county'].astype('str')+variables['tract'].astype('str')+variables['block group'].astype('str')
         return variables
 
 
