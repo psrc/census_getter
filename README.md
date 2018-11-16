@@ -17,12 +17,9 @@ Installation
 4. Get and install other required libraries, which can be found online.  Run the following commands on the activated conda Python environment:
     * pip install [activitysim](https://pypi.python.org/pypi/activitysim)
     * pip install [synthpop](https://github.com/UDST/synthpop)
-   
-
-6. Set the working_dir in the file `census_getter/example_psrc/run_census_getter.py` to the root of the cloned repository.
-
-7. Run census_getter.
+    
+5. Run census_getter.
     * Navigate to census_getter/example_psrc directory. 
     * Run`python run_census_getter.py`
     
-8. Outputs are located in example_psrc/output.
+6. Outputs are located in example_psrc/output.
