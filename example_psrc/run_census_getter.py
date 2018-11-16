@@ -1,12 +1,10 @@
 import os
 import logging
 
-# Define a root working dir for testing (where the repo is locally stored)
-working_dir = r'C:\Users\Brice'
-
-os.sys.path.append(os.path.join(working_dir,'census_getter'))
-os.sys.path.append(os.path.join(working_dir,'census_getter/census_getter'))
-os.chdir(os.path.join(working_dir,'census_getter/example_psrc'))
+working_dir = os.getcwd()
+parent_dir = os.path.abspath(os.path.join(working_dir, os.pardir))
+os.sys.path.append(os.path.join(parent_dir))
+os.sys.path.append(os.path.join(parent_dir,'census_getter'))
 
 from activitysim.core import inject_defaults
 from census_getter import steps
