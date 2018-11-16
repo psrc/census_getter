@@ -12,10 +12,16 @@ state: 53
 #county_name_list = [35, 53, 61, 33]
 counties: ['035', '033', '053', '061']
 census_year: 2016
+tract: None
 # Must create Env Variable holding census key. Put name of Var here:
 census_key: CENSUS_KEY
 
 controls_expression_file: census_getter_expressions.csv
+
+hh_bg_size_attr: "B11001_001E"
+hh_tract_size_attr: "B08201_001E"
+pers_bg_size_attr: "B01001_001E"
+pers_tract_size_attr: "B01003_001E"
 
 # Tracing
 # ------------------------------------------------------------------

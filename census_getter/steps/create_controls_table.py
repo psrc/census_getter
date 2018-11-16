@@ -14,8 +14,15 @@ from synthpop.census_helpers import Census
 
 logger = logging.getLogger(__name__)
 
-def get_acs_data(key, spec, state, county, census_year, tract=None):
-        c = Census(os.environ[key])
+def get_acs_data(county, spec, settings):
+        state = settings['state']
+        census_year = settings['census_year'] 
+        if settings['tract'] ==  'None':
+            tract = None
+        else:
+            tract = settings['tract']
+
+        c = Census(os.environ[settings['census_key']])
 
         hh_bg_columns = get_column_names('block_group', 'household', spec)
         hh_tract_columns = get_column_names('tract', 'household', spec)
@@ -26,8 +33,8 @@ def get_acs_data(key, spec, state, county, census_year, tract=None):
         h_acs = c.block_group_and_tract_query(
             hh_bg_columns, hh_tract_columns, state, county,
             merge_columns=['tract', 'county', 'state'],
-            block_group_size_attr="B11001_001E",
-            tract_size_attr="B08201_001E",
+            block_group_size_attr=settings['hh_bg_size_attr'],
+            tract_size_attr=settings['hh_tract_size_attr'],
             tract=tract,
             year=census_year)
         
@@ -40,8 +47,8 @@ def get_acs_data(key, spec, state, county, census_year, tract=None):
         p_acs = c.block_group_and_tract_query(
             pers_bg_columns, pers_tract_columns, state, county,
             merge_columns=['tract', 'county', 'state'],
-            block_group_size_attr='B01001_001E',
-            tract_size_attr='B01003_001E',
+            block_group_size_attr=settings['pers_bg_size_attr'],
+            tract_size_attr=settings['pers_tract_size_attr'],
             tract=tract,
             year = census_year)
 
@@ -105,8 +112,6 @@ def get_column_names(geog, type, spec):
 
 def to_series(x, target=None):
         if x is None or np.isscalar(x):
-            #if target:
-            #    logger.warn("WARNING: assign_variables promoting scalar %s to series" % target)
             x = pd.Series([x] * len(locals_dict[parcel_df_name].index),
                           index=locals_dict[parcel_df_name].index)
         if not isinstance(x, pd.Series):
@@ -121,7 +126,7 @@ def create_controls_table(settings, configs_dir):
     spec = read_spec(expression_file_path)
     df_list = []
     for county in settings['counties']:
-        df = get_acs_data(settings['census_key'], spec, settings['state'], county, settings['census_year'],)
+        df = get_acs_data(county, spec, settings)
         df_list.append(df)
     acs_table = pd.concat(df_list) 
     acs_table.reset_index(inplace = True)
