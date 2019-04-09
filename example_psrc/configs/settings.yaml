@@ -23,6 +23,15 @@ hh_tract_size_attr: "B08201_001E"
 pers_bg_size_attr: "B01001_001E"
 pers_tract_size_attr: "B01003_001E"
 
+input_table_list:
+  - tablename: ofm_control_totals
+    filename : housholds2010_OFM2014.csv
+    #column_map:
+      # not sure what SERIALNO is, but it is not unique
+      #SERIALNO: hh_id
+      #hh_totals: HU2018
+      #person_totals: HHP2018
+
 # Tracing
 # ------------------------------------------------------------------
 #trace_geography:
@@ -73,6 +82,7 @@ output_synthetic_population:
 # ------------------------------------------------------------------
 run_list:
   steps:
+    - input_pre_processor
     - create_controls_table
     - write_tables
   
