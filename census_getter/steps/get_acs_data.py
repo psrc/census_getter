@@ -14,7 +14,7 @@ from synthpop.census_helpers import Census
 
 logger = logging.getLogger(__name__)
 
-def get_acs_data(county, spec, settings):
+def call_census_api(county, spec, settings):
         state = settings['state']
         census_year = settings['census_year'] 
         if settings['tract'] ==  'None':
@@ -121,12 +121,12 @@ def to_series(x, target=None):
         return x
 
 @inject.step()
-def create_controls_table(settings, configs_dir):
+def get_acs_data(settings, configs_dir):
     expression_file_path = os.path.join(configs_dir, settings['controls_expression_file'])
     spec = read_spec(expression_file_path)
     df_list = []
     for county in settings['counties']:
-        df = get_acs_data(county, spec, settings)
+        df = call_census_api(county, spec, settings)
         df_list.append(df)
     acs_table = pd.concat(df_list) 
     acs_table.reset_index(inplace = True)

@@ -83,7 +83,7 @@ output_synthetic_population:
 run_list:
   steps:
     - input_pre_processor
-    - create_controls_table
+    - get_acs_data
     - write_tables
   
 

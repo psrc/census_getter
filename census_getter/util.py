@@ -59,3 +59,12 @@ def data_dir_from_settings():
 
     logger.info("data_dir: %s" % data_dir)
     return data_dir
+
+def create_block_group_id(df):
+    """ Strip geography codes to integers and concatenate as string to get block group ID """
+    for col in ['state','county','tract','block group']:
+        df[col] = df[col].astype('int').astype('str')
+ 
+    df['block_group_id'] = df['state']+df['county']+df['tract']+df['block group']
+ 
+    return df
