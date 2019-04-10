@@ -1,4 +1,6 @@
 description,target,expression
 id,block_group_id,df.block_group_id
-male,male_ofm,(df.male/(df.male + df.female)).fillna(0) * df.pop_no_gq
-female,female_ofm,(df.female/(df.male + df.female)).fillna(0) * df.pop_no_gq
+male,male,(df.male/(df.male + df.female)).fillna(0) * df.HHP2018
+female,female,(df.female/(df.male + df.female)).fillna(0) * df.HHP2018
+cars,_cars_total,df.cars_none + df.cars_one+df.cars_two_or_more
+cars,cars_none,(df.cars_none/_cars_total).fillna(0)*df.OHU2018

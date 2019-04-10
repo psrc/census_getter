@@ -26,7 +26,9 @@ pers_tract_size_attr: "B01003_001E"
 
 input_table_list:
   - tablename: ofm_control_totals
-    filename : housholds2010_OFM2014.csv
+    filename : ofm_control_totals.csv
+  - tablename: hh_size_control_totals
+    filename: hh_size_control_totals.csv
     #column_map:
       # not sure what SERIALNO is, but it is not unique
       #SERIALNO: hh_id
@@ -56,6 +58,7 @@ output_tables:
   tables:
     - all_acs
     - combined_acs
+    - ofm_controls
 
 # Synthetic Population Output Specification
 # ------------------------------------------------------------------

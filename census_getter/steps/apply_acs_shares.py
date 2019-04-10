@@ -51,9 +51,11 @@ def apply_acs_shares(settings, configs_dir):
     spec = read_spec(expression_file_path)
 
     create_block_group_id('ofm_control_totals')
+    create_block_group_id('hh_size_control_totals')
     inject.broadcast(cast='ofm_control_totals', onto='combined_acs', cast_on = 'block_group_id', onto_on='block_group_id')
+    inject.broadcast(cast='hh_size_control_totals', onto='combined_acs', cast_on = 'block_group_id', onto_on='block_group_id')
     inject.merge_tables(target='combined_acs', tables=['ofm_control_totals', 'combined_acs'])
-    df = inject.merge_tables(target='combined_acs', tables=['ofm_control_totals', 'combined_acs'])
+    df = inject.merge_tables(target='combined_acs', tables=['ofm_control_totals', 'combined_acs', 'hh_size_control_totals'])
     locals_d = {
     }
 
