@@ -17,6 +17,7 @@ tract: None
 census_key: CENSUS_KEY
 
 controls_expression_file: census_getter_expressions.csv
+apply_acs_shares_expression_file: ofm_shares.csv
 
 hh_bg_size_attr: "B11001_001E"
 hh_tract_size_attr: "B08201_001E"
@@ -84,7 +85,9 @@ run_list:
   steps:
     - input_pre_processor
     - get_acs_data
+    - apply_acs_shares
     - write_tables
+
   
 
   #resume_after: expand_households

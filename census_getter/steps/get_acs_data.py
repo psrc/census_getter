@@ -10,6 +10,7 @@ from activitysim.core import inject
 from activitysim.core import pipeline
 
 from census_getter.util import setting
+#from census_getter.util import create_block_group_id
 from synthpop.census_helpers import Census
 
 logger = logging.getLogger(__name__)
@@ -80,7 +81,8 @@ def create_controls(spec):
          # DataFrame from list of tuples [<target_name>, <eval results>), ...]
         variables = pd.DataFrame.from_items(variables)
         variables = variables.merge(locals_d['df'][['state','county', 'tract', 'block group']], how='left', left_index = True, right_index = True)
-        variables['block_group_id'] = variables['county'].astype('str')+variables['tract'].astype('str')+variables['block group'].astype('str')
+        #variables['block_group_id'] = variables['county'].astype('str')+variables['tract'].astype('str')+variables['block group'].astype('str')
+        #variables = create_block_group_id(variables)
         return variables
 
 
@@ -120,6 +122,14 @@ def to_series(x, target=None):
 
         return x
 
+def create_block_group_id(my_table):
+    t = inject.get_table(my_table)
+    df = t.to_frame(columns=['state', 'county', 'tract', 'block group'])
+    for col in df.columns:
+        df[col] = df[col].astype('int').astype('str')
+    s = df['state']+df['county']+df['tract']+df['block group']
+    inject.add_column(my_table, 'block_group_id', s)
+
 @inject.step()
 def get_acs_data(settings, configs_dir):
     expression_file_path = os.path.join(configs_dir, settings['controls_expression_file'])
@@ -133,5 +143,6 @@ def get_acs_data(settings, configs_dir):
     inject.add_table('all_acs', acs_table)
     controls_table = create_controls(spec)
     inject.add_table('combined_acs', controls_table)
+    create_block_group_id('combined_acs')
 
     print 'done'

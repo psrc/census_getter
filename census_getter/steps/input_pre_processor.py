@@ -10,7 +10,7 @@ import numpy as np
 from activitysim.core import inject
 from activitysim.core import pipeline
 
-from census_getter.util import data_dir_from_settings, setting, create_block_group_id
+from census_getter.util import data_dir_from_settings, setting 
 
 
 logger = logging.getLogger(__name__)
@@ -97,7 +97,7 @@ def input_pre_processor():
                 df.index.names = [index_col]
 
         # generate consistent ID at block group level
-        df = create_block_group_id(df)
+        #df = create_block_group_id(df)
 
         # read expression file
         # expression_filename = table_info.get('expression_filename', None)
