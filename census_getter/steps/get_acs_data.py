@@ -9,8 +9,7 @@ import numpy as np
 from activitysim.core import inject
 from activitysim.core import pipeline
 
-from census_getter.util import setting
-#from census_getter.util import create_block_group_id
+from census_getter.util import setting, create_block_group_id
 from synthpop.census_helpers import Census
 
 logger = logging.getLogger(__name__)
@@ -78,11 +77,10 @@ def create_controls(spec):
                 variables.insert(0, statement)
                 seen.add(target_name)
 
-         # DataFrame from list of tuples [<target_name>, <eval results>), ...]
+
         variables = pd.DataFrame.from_items(variables)
         variables = variables.merge(locals_d['df'][['state','county', 'tract', 'block group']], how='left', left_index = True, right_index = True)
-        #variables['block_group_id'] = variables['county'].astype('str')+variables['tract'].astype('str')+variables['block group'].astype('str')
-        #variables = create_block_group_id(variables)
+
         return variables
 
 
@@ -98,8 +96,6 @@ def read_spec(fname):
 
         return cfg
     
-    #def _apply_external_control_totals(self, join_cols, )
-
 def get_column_names(geog, type, spec):
         expression_list = spec[(spec.geog==geog) & (spec.type==type)].expression.tolist()
         column_list = []
@@ -121,14 +117,6 @@ def to_series(x, target=None):
         x.name = target
 
         return x
-
-def create_block_group_id(my_table):
-    t = inject.get_table(my_table)
-    df = t.to_frame(columns=['state', 'county', 'tract', 'block group'])
-    for col in df.columns:
-        df[col] = df[col].astype('int').astype('str')
-    s = df['state']+df['county']+df['tract']+df['block group']
-    inject.add_column(my_table, 'block_group_id', s)
 
 @inject.step()
 def get_acs_data(settings, configs_dir):

@@ -1,6 +1,45 @@
 description,target,expression
 id,block_group_id,df.block_group_id
-male,male,(df.male/(df.male + df.female)).fillna(0) * df.HHP2018
-female,female,(df.female/(df.male + df.female)).fillna(0) * df.HHP2018
-cars,_cars_total,df.cars_none + df.cars_one+df.cars_two_or_more
-cars,cars_none,(df.cars_none/_cars_total).fillna(0)*df.OHU2018
+state,state,df.state
+county,county,df.county
+tract,tract,df.tract
+block_group,block_group,df['block group']
+gender_total,_gender_total,df.male + df.female
+male,male,(df.male/_gender_total) * df.HHP2018
+female,female,(df.female/_gender_total) * df.HHP2018
+_cars_total,_cars_total,df.cars_none + df.cars_one+df.cars_two_or_more
+cars_none,cars_none,(df.cars_none/_cars_total)*df.OHU2018
+cars_none,cars_none,(df.cars_none/_cars_total)*df.OHU2018
+cars_one,cars_one,(df.cars_one/_cars_total)*df.OHU2018
+cars_two_or_more,cars_two_or_more,(df.cars_two_or_more/_cars_total)*df.OHU2018
+_income_total,_income_total,df.income_lt15 + df.income_gt15_lt30 + df.income_gt30_lt60 + df.income_gt60_lt100 + df.income_gt100
+income_lt15,income_lt15,(df.income_lt15/_income_total)*df.OHU2018
+income_gt15_lt30,income_gt15_lt30,(df.income_gt15_lt30/_income_total)*df.OHU2018
+income_gt30_lt60,income_gt30_lt60,(df.income_gt30_lt60/_income_total)*df.OHU2018
+income_gt60_lt100,income_gt60_lt100,(df.income_gt60_lt100/_income_total)*df.OHU2018
+income_gt100,income_gt100,(df.income_gt100/_income_total)*df.OHU2018
+_hh_size_total,_hh_size_total,df.HH1p + df.HH2p + df.HH3p + df.HH4p + df.HH5p + df.HH6p + df.HH7p
+HH1P,HH1p,(df.HH1p/_hh_size_total)*df.OHU2018
+HH2P,HH2p,(df.HH2p/_hh_size_total)*df.OHU2018
+HH3P,HH3p,(df.HH3p/_hh_size_total)*df.OHU2018
+HH4P,HH4p,(df.HH4p/_hh_size_total)*df.OHU2018
+HH5P,HH5p,(df.HH5p/_hh_size_total)*df.OHU2018
+HH6P,HH6p,(df.HH6p/_hh_size_total)*df.OHU2018
+HH7P,HH7p,(df.HH7p/_hh_size_total)*df.OHU2018
+_workers_tot,_workers_tot,df.workers_0 + df.workers_1 + df.workers_2 + df.workers_3_plus
+workers_0,workers_0,(df.workers_0/_workers_tot) * df.OHU2018
+workers_1,workers_1,(df.workers_1/_workers_tot) * df.OHU2018
+workers_2,workers_2,(df.workers_2/_workers_tot) * df.OHU2018
+workers_3_plus,workers_3_plus,(df.workers_3_plus/_workers_tot) * df.OHU2018
+_school_tot,_school_tot,df.school_yes + df.school_no
+school_yes,school_yes,(df.school_yes/_school_tot) * df.HHP2018
+school_no,school_no,(df.school_no/_school_tot) * df.HHP2018
+_race_total,_race_total,df.white + df.black + df.other
+white,white,(df.white/_race_total) * df.HHP2018
+black,black,(df.black/_race_total) * df.HHP2018
+other,other,(df.other/_race_total) * df.HHP2018
+_age_total,_age_total,df.age_19_and_under + df.age_20_to_35 + df.age_35_to_60 + df.age_above_60
+age_19_and_under,age_19_and_under,(df.age_19_and_under/_age_total) * df.HHP2018
+age_20_to_35,age_20_to_35,(df.age_20_to_35/_age_total) * df.HHP2018
+age_35_to_60,age_35_to_60,(df.age_35_to_60/_age_total) * df.HHP2018
+age_above_60,age_above_60,(df.age_above_60/_age_total) * df.HHP2018

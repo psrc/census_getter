@@ -1,6 +1,6 @@
 import os
 import logging
-os.chdir(r'D:\stefan\census_getter_new\census_getter\example_psrc')
+os.chdir(r'C:\users\brice\census_getter_dev\example_psrc')
 working_dir = os.getcwd()
 parent_dir = os.path.abspath(os.path.join(working_dir, os.pardir))
 os.sys.path.append(os.path.join(parent_dir))

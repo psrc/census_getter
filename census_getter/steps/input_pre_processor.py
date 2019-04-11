@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 @inject.step()
-def input_pre_processor():
+def input_pre_processor(settings):
     """
     Read input text files and save them as pipeline tables for use in subsequent steps.
 
@@ -96,31 +96,10 @@ def input_pre_processor():
             else:
                 df.index.names = [index_col]
 
-        # generate consistent ID at block group level
-        #df = create_block_group_id(df)
-
-        # read expression file
-        # expression_filename = table_info.get('expression_filename', None)
-        # if expression_filename:
-        #     assert False
-        #     expression_file_path = os.path.join(configs_dir, expression_filename)
-        #     if not os.path.exists(expression_file_path):
-        #         raise RuntimeError("input_pre_processor %s - expression file not found: %s"
-        #                            % (table, expression_file_path, ))
-        #     spec = assign.read_assignment_spec(expression_file_path)
-        #
-        #     df_alias = table_info.get('df_alias', table)
-        #
-        #     locals_d = {}
-        #
-        #     results, trace_results, trace_assigned_locals \
-        #         = assign.assign_variables(spec, df, locals_d, df_alias=df_alias)
-        #     # for column in results.columns:
-        #     #     orca.add_column(table, column, results[column])
-        #
-        #     df = pd.concat([df, results], axis=1)
+        # fill nan values
+        if settings['nan_fill']:
+            df.fillna(setting['nan_fill'], inplace=True)
 
         logger.info("adding table %s" % tablename)
 
-        # add (or replace) pipeline table
         inject.add_table(tablename, df)
