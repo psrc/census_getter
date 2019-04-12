@@ -36,3 +36,5 @@ block_group,age_19_and_under,person,df['B01001_003E'] + df['B01001_004E'] + df['
 block_group,age_20_to_35,person,df['B01001_008E'] + df['B01001_009E'] + df['B01001_010E'] + df['B01001_011E'] + df['B01001_012E'] + df['B01001_032E'] + df['B01001_033E'] + df['B01001_034E'] + df['B01001_035E'] + df['B01001_036E']
 block_group,age_35_to_60,person,df['B01001_013E'] + df['B01001_014E'] + df['B01001_015E'] + df['B01001_016E'] + df['B01001_017E'] + df['B01001_037E'] + df['B01001_038E'] + df['B01001_039E'] + df['B01001_040E'] + df['B01001_041E']
 block_group,age_above_60,person,df['B01001_018E'] + df['B01001_019E'] + df['B01001_020E'] + df['B01001_021E'] + df['B01001_022E'] + df['B01001_023E'] + df['B01001_024E'] + df['B01001_025E'] + df['B01001_042E'] + df['B01001_043E'] + df['B01001_044E'] + df['B01001_045E'] + df['B01001_046E'] + df['B01001_047E'] + df['B01001_048E'] + df['B01001_049E']
+tract,is_worker,person,df['B08011_001E']
+tract,non_worker,person,df['B01003_001E']-df['B08011_001E']

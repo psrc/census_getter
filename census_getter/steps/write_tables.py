@@ -112,6 +112,7 @@ def write_tables(output_dir):
             continue
 
         df = table.to_frame()
+        df.fillna(0, inplace = True)
         file_name = "%s.csv" % table_name
         logger.info("writing output file %s" % file_name)
         file_path = os.path.join(output_dir, file_name)
