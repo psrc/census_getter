@@ -47,4 +47,6 @@ def apply_acs_shares(settings, configs_dir):
 
     results, trace_results, trace_assigned_locals = assign.assign_variables(spec, df, locals_d)
 
+    results = results.round(0)
+
     inject.add_table("ofm_controls", results)
