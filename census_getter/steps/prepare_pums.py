@@ -46,7 +46,7 @@ def prepare_pums(settings, configs_dir):
 
     # Calculate household workers based on person records
     pums_person['is_worker'] = 0
-    pums_person.loc[((pums_person['COW'] < 9) & (pums_person['COW'] > 0)),'is_worker'] = 1
+    pums_person.loc[pums_person['ESR'].isin([1,2,4,5]), 'is_worker'] = 1
     worker_count = pums_person.groupby('hhnum').sum()[['is_worker']]
     pums_hh['worker_count'] = -99
     pums_hh.index = pums_hh.hhnum

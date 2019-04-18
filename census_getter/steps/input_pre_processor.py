@@ -52,54 +52,55 @@ def input_pre_processor(settings):
     """
 
     # alternate table list name may have been provided as a model argument
-    table_list_name = inject.get_step_arg('table_list', default='input_table_list')
-    table_list = setting(table_list_name)
-    assert table_list is not None, "table list '%s' not in settings." % table_list_name
+    for table_list in ['input_table_list','pums_table_list']:
+        table_list_name = inject.get_step_arg('table_list', default=table_list) 
+        table_list = setting(table_list_name)
+        assert table_list is not None, "table list '%s' not in settings." % table_list_name
 
-    data_dir = data_dir_from_settings()
+        data_dir = data_dir_from_settings()
 
-    for table_info in table_list:
+        for table_info in table_list:
 
-        tablename = table_info['tablename']
+            tablename = table_info['tablename']
 
-        logger.info("input_pre_processor processing %s" % tablename)
+            logger.info("input_pre_processor processing %s" % tablename)
 
-        # read the csv file
-        data_filename = table_info.get('filename', None)
-        data_file_path = os.path.join(data_dir, data_filename)
-        if not os.path.exists(data_file_path):
-            raise RuntimeError("input_pre_processor %s - input file not found: %s"
-                               % (tablename, data_file_path, ))
+            # read the csv file
+            data_filename = table_info.get('filename', None)
+            data_file_path = os.path.join(data_dir, data_filename)
+            if not os.path.exists(data_file_path):
+                raise RuntimeError("input_pre_processor %s - input file not found: %s"
+                                   % (tablename, data_file_path, ))
 
-        logger.info("Reading csv file %s" % data_file_path)
-        df = pd.read_csv(data_file_path, comment='#')
+            logger.info("Reading csv file %s" % data_file_path)
+            df = pd.read_csv(data_file_path, comment='#')
 
-        logger.info("input file columns: %s" % df.columns.values)
+            logger.info("input file columns: %s" % df.columns.values)
 
-        drop_columns = table_info.get('drop_columns', None)
-        if drop_columns:
-            for c in drop_columns:
-                logger.info("dropping column '%s'" % c)
-                del df[c]
+            drop_columns = table_info.get('drop_columns', None)
+            if drop_columns:
+                for c in drop_columns:
+                    logger.info("dropping column '%s'" % c)
+                    del df[c]
 
-        # rename columns
-        column_map = table_info.get('column_map', None)
-        if column_map:
-            df.rename(columns=column_map, inplace=True)
+            # rename columns
+            column_map = table_info.get('column_map', None)
+            if column_map:
+                df.rename(columns=column_map, inplace=True)
 
-        # set index
-        index_col = table_info.get('index_col', None)
-        if index_col is not None:
-            if index_col in df.columns:
-                assert not df.duplicated(index_col).any()
-                df.set_index(index_col, inplace=True)
-            else:
-                df.index.names = [index_col]
+            # set index
+            index_col = table_info.get('index_col', None)
+            if index_col is not None:
+                if index_col in df.columns:
+                    assert not df.duplicated(index_col).any()
+                    df.set_index(index_col, inplace=True)
+                else:
+                    df.index.names = [index_col]
 
-        # fill nan values
-        if settings['nan_fill']:
-            df.fillna(setting['nan_fill'], inplace=True)
+            # fill nan values
+            if settings['nan_fill']:
+                df.fillna(setting['nan_fill'], inplace=True)
 
-        logger.info("adding table %s" % tablename)
+            logger.info("adding table %s" % tablename)
 
-        inject.add_table(tablename, df)
+            inject.add_table(tablename, df)
