@@ -40,7 +40,7 @@ def prepare_pums(settings, configs_dir):
     pums_hh.index = pums_hh['SERIALNO']
 
     # Generate unique household ID "hhnum"
-    pums_hh['hhnum'] = [i+1 for i in xrange(len(pums_hh))]
+    pums_hh['hhnum'] = [i+1 for i in range(len(pums_hh))]
     pums_person['hhnum'] = 0
     pums_person.hhnum.update(pums_hh.hhnum)
 

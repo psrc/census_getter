@@ -39,7 +39,7 @@ def apply_acs_shares(settings, configs_dir):
 
         inject.broadcast(cast=tablename, onto='combined_acs', cast_on = 'block_group_id', onto_on='block_group_id')
         
-    input_table_list = [settings['input_table_list'][i]['tablename'] for i in xrange(len(settings['input_table_list']))]
+    input_table_list = [settings['input_table_list'][i]['tablename'] for i in range(len(settings['input_table_list']))]
     df = inject.merge_tables(target='combined_acs', tables=input_table_list + ['combined_acs'])
     inject.add_table("all_input_data", df)
     

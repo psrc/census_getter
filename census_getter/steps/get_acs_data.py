@@ -68,17 +68,18 @@ def create_controls(spec):
             values = to_series(eval(expression, globals(), locals_d), target=target)
             le.append((target, values))
        
-        variables = []
+        variables = {}
         seen = set()
         for statement in reversed(le):
             # statement is a tuple (<target_name>, <eval results in pandas.Series>)
             target_name = statement[0]
             if target_name not in seen:
-                variables.insert(0, statement)
+                variables[statement[0]] = statement[1]
+                #variables.insert(0, statement)
                 seen.add(target_name)
 
 
-        variables = pd.DataFrame.from_items(variables)
+        variables = pd.DataFrame.from_dict(variables)
         variables = variables.merge(locals_d['df'][['state','county', 'tract', 'block group']], how='left', left_index = True, right_index = True)
 
         return variables
@@ -133,4 +134,4 @@ def get_acs_data(settings, configs_dir):
     inject.add_table('combined_acs', controls_table)
     create_block_group_id('combined_acs')
 
-    print 'done'
+    print ('done')
