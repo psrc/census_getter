@@ -10,7 +10,7 @@
 # State, Counties & Year to get ACS data. Will use 5 year ACS by default. 
 state: 53
 counties: ['035', '033', '053', '061']
-census_year: 2017
+census_year: 2018
 tract: None
 # Must create Env Variable holding census key. Put name of Var here:
 census_key: CENSUS_KEY

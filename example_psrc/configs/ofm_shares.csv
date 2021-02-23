@@ -47,4 +47,7 @@ is_worker,is_worker,(df.is_worker/_workers_total) * df.HHP2018
 is_family,is_family,(df.is_family/df.hh_bg_weight) * df.OHU2018
 not_family,not_family,(df.not_family/df.hh_bg_weight) * df.OHU2018
 hh_bg_weight,hh_bg_weight,df.OHU2018
+_tenure_total,_tenure_total,df.rent + df.own
 pers_bg_weight,pers_bg_weight,df.HHP2018
+hh_rent,rent,(df.rent/_tenure_total)*df.OHU2018
+hh_own,own,(df.own/_tenure_total)*df.OHU2018
