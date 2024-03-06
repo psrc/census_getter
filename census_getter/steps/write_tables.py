@@ -32,7 +32,7 @@ import os
 from activitysim.core import pipeline
 from activitysim.core import inject
 
-from census_getter.util import setting
+from .. util import setting
 
 logger = logging.getLogger(__name__)
 

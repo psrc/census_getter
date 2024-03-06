@@ -9,7 +9,7 @@ from activitysim.core import inject
 from activitysim.core import pipeline
 from activitysim.core import assign
 
-from census_getter.util import setting, create_block_group_id
+from .. util import setting, create_block_group_id
 from synthpop.census_helpers import Census
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,10 @@ def prepare_pums(settings, configs_dir):
     pums_person = pums_person[pums_person['PUMA'].isin(puma_geog_lookup['PUMA'])]
 
     # Filter for households without group quarters
-    pums_hh = pums_hh[pums_hh['TYPE'].isin([1,2])]
+    if settings['census_year'] > 2020:
+        pums_hh = pums_hh[pums_hh['TYPEHUGQ'].isin([1])]
+    else:
+        pums_hh = pums_hh[pums_hh['TYPE'].isin([1,2])]
 
     # Filter for person/household matches
     pums_person = pums_person[pums_person['SERIALNO'].isin(pums_hh['SERIALNO'])]
@@ -53,7 +56,13 @@ def prepare_pums(settings, configs_dir):
     pums_hh.worker_count.update(worker_count.is_worker)
 
     # Combine households with workers >= 3
-    pums_hh.loc[pums_hh['worker_count'] >= 3,'worker_count'] = 3
+    #pums_hh.loc[pums_hh['worker_count'] >= 3,'worker_count'] = 3
 
+    # we are using 2021 5 year pums to have consistent PUMs geography (2010). 
+    # adjust income to 2022. 
+    pums_hh['HINCP'] = pums_hh.HINCP * (pums_hh.ADJINC/1000000)
+
+    
     inject.add_table("seed_persons", pums_person)
     inject.add_table("seed_households", pums_hh)
+

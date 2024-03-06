@@ -9,7 +9,7 @@ import numpy as np
 from activitysim.core import inject
 from activitysim.core import pipeline
 
-from census_getter.util import setting, create_block_group_id
+from .. util import setting, create_full_block_group_id, create_block_group_id
 from synthpop.census_helpers import Census
 
 logger = logging.getLogger(__name__)
@@ -121,7 +121,7 @@ def to_series(x, target=None):
 
 @inject.step()
 def get_acs_data(settings, configs_dir):
-    expression_file_path = os.path.join(configs_dir, settings['controls_expression_file'])
+    expression_file_path = os.path.join(configs_dir,settings['controls_expression_file'])
     spec = read_spec(expression_file_path)
     df_list = []
     for county in settings['counties']:
@@ -132,6 +132,6 @@ def get_acs_data(settings, configs_dir):
     inject.add_table('all_acs', acs_table)
     controls_table = create_controls(spec)
     inject.add_table('combined_acs', controls_table)
-    create_block_group_id('combined_acs')
+    create_full_block_group_id('combined_acs')
 
     print ('done')
