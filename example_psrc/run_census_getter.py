@@ -1,12 +1,12 @@
 import os
 import logging
-
+os.chdir(r'E:\census_getter\census_getter\example_psrc')
 working_dir = os.getcwd()
 parent_dir = os.path.abspath(os.path.join(working_dir, os.pardir))
 os.sys.path.append(os.path.join(parent_dir))
 os.sys.path.append(os.path.join(parent_dir,'census_getter'))
 
-from activitysim.core import inject_defaults
+from activitysim.core import inject
 from census_getter import steps
 
 from activitysim.core import tracing
@@ -38,7 +38,7 @@ steps = run_list.get('steps')
 resume_after = run_list.get('resume_after', None)
 
 if resume_after:
-    print "resume_after", resume_after
+    print ("resume_after", resume_after)
 
 pipeline.run(models=steps, resume_after=resume_after)
 

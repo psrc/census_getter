@@ -40,6 +40,31 @@ def setting(key, default=None):
 
     return settings.get(key, default)
 
+def create_block_group_id(my_table):
+    """ 
+    Inject standard ID column on state, county, tract, and block group values
+    Convert all to integers, then concat as string. 
+    """
+    
+    t = inject.get_table(my_table)
+    df = t.to_frame(columns=['state', 'county', 'tract', 'block group'])
+    for col in df.columns:
+        df[col] = df[col].astype('int').astype('str')
+    s = df['state']+df['county']+df['tract']+df['block group']
+    inject.add_column(my_table, 'block_group_id', s)
+
+def create_full_block_group_id(my_table):
+    """ 
+    Inject standard ID column on state, county, tract, and block group values
+    Convert all to integers, then concat as string. 
+    """
+    
+    t = inject.get_table(my_table)
+    df = t.to_frame(columns=['state', 'county', 'tract', 'block group'])
+    for col in df.columns:
+        df[col] = df[col].astype('str')
+    s = df['state']+df['county']+df['tract']+df['block group']
+    inject.add_column(my_table, 'block_group_id', s)
 
 def data_dir_from_settings():
     """

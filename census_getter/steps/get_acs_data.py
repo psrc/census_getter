@@ -9,12 +9,12 @@ import numpy as np
 from activitysim.core import inject
 from activitysim.core import pipeline
 
-from census_getter.util import setting
+from .. util import setting, create_full_block_group_id, create_block_group_id
 from synthpop.census_helpers import Census
 
 logger = logging.getLogger(__name__)
 
-def get_acs_data(county, spec, settings):
+def call_census_api(county, spec, settings):
         state = settings['state']
         census_year = settings['census_year'] 
         if settings['tract'] ==  'None':
@@ -68,19 +68,20 @@ def create_controls(spec):
             values = to_series(eval(expression, globals(), locals_d), target=target)
             le.append((target, values))
        
-        variables = []
+        variables = {}
         seen = set()
         for statement in reversed(le):
             # statement is a tuple (<target_name>, <eval results in pandas.Series>)
             target_name = statement[0]
             if target_name not in seen:
-                variables.insert(0, statement)
+                variables[statement[0]] = statement[1]
+                #variables.insert(0, statement)
                 seen.add(target_name)
 
-         # DataFrame from list of tuples [<target_name>, <eval results>), ...]
-        variables = pd.DataFrame.from_items(variables)
+
+        variables = pd.DataFrame.from_dict(variables)
         variables = variables.merge(locals_d['df'][['state','county', 'tract', 'block group']], how='left', left_index = True, right_index = True)
-        variables['block_group_id'] = variables['county'].astype('str')+variables['tract'].astype('str')+variables['block group'].astype('str')
+
         return variables
 
 
@@ -96,8 +97,6 @@ def read_spec(fname):
 
         return cfg
     
-    #def _apply_external_control_totals(self, join_cols, )
-
 def get_column_names(geog, type, spec):
         expression_list = spec[(spec.geog==geog) & (spec.type==type)].expression.tolist()
         column_list = []
@@ -121,17 +120,18 @@ def to_series(x, target=None):
         return x
 
 @inject.step()
-def create_controls_table(settings, configs_dir):
-    expression_file_path = os.path.join(configs_dir, settings['controls_expression_file'])
+def get_acs_data(settings, configs_dir):
+    expression_file_path = os.path.join(configs_dir,settings['controls_expression_file'])
     spec = read_spec(expression_file_path)
     df_list = []
     for county in settings['counties']:
-        df = get_acs_data(county, spec, settings)
+        df = call_census_api(county, spec, settings)
         df_list.append(df)
     acs_table = pd.concat(df_list) 
     acs_table.reset_index(inplace = True)
     inject.add_table('all_acs', acs_table)
     controls_table = create_controls(spec)
     inject.add_table('combined_acs', controls_table)
+    create_full_block_group_id('combined_acs')
 
-    print 'done'
+    print ('done')

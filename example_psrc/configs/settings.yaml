@@ -1,5 +1,5 @@
 ####################################################################
-# PopulationSim_DataPrep Properties
+# Census Getter Properties
 ####################################################################
 
 
@@ -9,31 +9,43 @@
 
 # State, Counties & Year to get ACS data. Will use 5 year ACS by default. 
 state: 53
-#county_name_list = [35, 53, 61, 33]
 counties: ['035', '033', '053', '061']
-census_year: 2016
+census_year: 2018
 tract: None
 # Must create Env Variable holding census key. Put name of Var here:
 census_key: CENSUS_KEY
 
 controls_expression_file: census_getter_expressions.csv
+apply_acs_shares_expression_file: ofm_shares.csv
 
+# Relate block groups with tracts
 hh_bg_size_attr: "B11001_001E"
 hh_tract_size_attr: "B08201_001E"
 pers_bg_size_attr: "B01001_001E"
 pers_tract_size_attr: "B01003_001E"
 
-# Tracing
-# ------------------------------------------------------------------
-#trace_geography:
-#  TAZ: 100
-#  TRACT: 10200
 
-  
-# Data Directory
+# Local Data
 # ------------------------------------------------------------------
+# Provide non-Census data for use in expression files
 data_dir: data
 
+input_table_list:
+  - tablename: ofm_control_totals
+    filename : ofm_control_totals.csv
+  - tablename: hh_size_control_totals
+    filename: hh_size_control_totals.csv
+
+pums_table_list:
+  - tablename: pums_hh
+    filename : psam_h53.csv
+  - tablename: pums_person
+    filename: psam_p53.csv
+  - tablename: puma_geog_lookup
+    filename: puma_geog_lookup.csv
+
+# For local data, fill NaN values; use None to leave NaNs
+nan_fill: 0
 
 
 # Output Tables
@@ -44,37 +56,20 @@ data_dir: data
 output_tables:
   action: include
   tables:
+    - seed_households
+    - seed_persons
     - all_acs
     - combined_acs
-
-# Synthetic Population Output Specification
-# ------------------------------------------------------------------
-#
-
-output_synthetic_population:
-  household_id: household_id
-  households:
-    filename: synthetic_households.csv
-    columns:
-      - NP
-      - AGEHOH
-      - HHINCADJ
-      - NWESR
-  persons:
-    filename: synthetic_persons.csv
-    columns:
-      - per_num
-      - AGEP
-      - OSUTAG
-      - OCCP
+    - all_input_data
+    - ofm_controls
 
 
 # Steps for base mode
 # ------------------------------------------------------------------
 run_list:
   steps:
-    - create_controls_table
+    - input_pre_processor
+    - prepare_pums
+    - get_acs_data
+    - apply_acs_shares
     - write_tables
-  
-
-  #resume_after: expand_households
