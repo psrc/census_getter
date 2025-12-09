@@ -12,6 +12,9 @@ dependencies = ["activitysim==1.2.1",
     "numpy==1.26",
     "setuptools",
 ]
+[tool.setuptools.packages.find]
+where = ["census_getter"] # Tells setuptools to look in the 'src' folder
+include = ["census_getter*"]
 
 [project.scripts]
 activitysim = "census_getter.cli.main:main"
