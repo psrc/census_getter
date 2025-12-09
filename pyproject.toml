@@ -1,0 +1,18 @@
+[project]
+name = "census-getter"
+version = "0.0.1"
+description = "ACS Data to Pandas Dataframes"
+authors = [
+    {name = "PSRC", email = "scoe@psrc.org"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["activitysim==1.2.1",
+    "numpy==1.26",
+    "setuptools",
+]
+
+[project.scripts]
+activitysim = "census_getter.cli.main:main"
+
