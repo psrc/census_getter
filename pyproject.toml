@@ -12,12 +12,12 @@ dependencies = [
     "activitysim==1.2.1",
     "numpy==1.26",
     "setuptools",
+    "synthpop"
 ]
 
 [project.scripts]
-census-getter = "census_getter.cli.main:main"  # Changed to match project name
+census-getter = "census_getter.cli.main:main"
 
-[build-system]
-requires = ["setuptools>=45", "wheel"]
-build-backend = "setuptools.build_meta"
+[tool.uv] # <--- Added the correct table header
+package = true # <--- Now correctly scoped under [tool.uv]
 
