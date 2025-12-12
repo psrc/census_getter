@@ -9,7 +9,7 @@ license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "activitysim==1.2.1",
+    "activitysim==1.23.4",
     "numpy==1.26",
     "setuptools",
     "synthpop"
