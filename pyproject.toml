@@ -10,9 +10,10 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "activitysim==1.2.1",
+    "census",
     "numpy==1.23.4",
     "setuptools",
-    "synthpop"
+    "us"
 ]
 
 [project.scripts]
@@ -20,4 +21,5 @@ census-getter = "census_getter.cli.main:main"
 
 [tool.uv] # <--- Added the correct table header
 package = true # <--- Now correctly scoped under [tool.uv]
+
 

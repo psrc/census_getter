@@ -12,7 +12,7 @@ from activitysim.core import assign
 
 from .. util import setting, create_block_group_id, create_full_block_group_id
 #from census_getter.util import create_block_group_id
-from synthpop.census_helpers import Census
+from ..census_helpers import Census
 
 logger = logging.getLogger(__name__)
 

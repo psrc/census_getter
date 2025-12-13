@@ -6,3 +6,4 @@ __doc__ = 'census_getter'
 __all__ = ['setup_data_structures']
 
 from . import util
+from . import census_helpers
