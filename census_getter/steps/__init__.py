@@ -1,5 +1,6 @@
 from activitysim.core import inject
 
+from . import pums_download
 from . import prepare_pums
 from . import get_acs_data
 from . import write_tables

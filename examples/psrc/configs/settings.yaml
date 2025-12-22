@@ -68,6 +68,7 @@ output_tables:
 # ------------------------------------------------------------------
 run_list:
   steps:
+    - pums_download
     - input_pre_processor
     - prepare_pums
     - get_acs_data
