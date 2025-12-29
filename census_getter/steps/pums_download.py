@@ -46,7 +46,7 @@ def get_data(census_year, pums_table, state_id_str, state_abbr, overwrite=False)
 
 @inject.step()
 def pums_download(settings):
-    census_year = settings['census_year']
+    census_year = settings['pums_year']
     state_id_str = str(settings['state'])
     state_abbr = us.states.mapping('fips', 'abbr')[state_id_str].lower()
     
