@@ -53,18 +53,14 @@ def create_block_group_id(my_table):
     s = df['state']+df['county']+df['tract']+df['block group']
     inject.add_column(my_table, 'block_group_id', s)
 
-def create_full_block_group_id(my_table):
-    """ 
-    Inject standard ID column on state, county, tract, and block group values
-    Convert all to integers, then concat as string. 
-    """
-    
-    t = inject.get_table(my_table)
-    df = t.to_frame(columns=['state', 'county', 'tract', 'block group'])
-    for col in df.columns:
-        df[col] = df[col].astype('str')
-    s = df['state']+df['county']+df['tract']+df['block group']
-    inject.add_column(my_table, 'block_group_id', s)
+def create_full_block_group_id(df):
+    cols = ['state','county', 'tract', 'block group']
+    # concatenate to create full block group id using zfill to ensure proper lengths
+    df['block_group_id'] = df['state'].astype(str).str.zfill(2) + \
+                                df['county'].astype(str).str.zfill(3) + \
+                                df['tract'].astype(str).str.zfill(6) + \
+                                df['block group'].astype(str)
+    return df
 
 def data_dir_from_settings():
     """

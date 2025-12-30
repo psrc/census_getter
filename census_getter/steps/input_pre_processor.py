@@ -10,7 +10,7 @@ import numpy as np
 from activitysim.core import inject
 from activitysim.core import pipeline
 
-from .. util import data_dir_from_settings, setting 
+from .. util import data_dir_from_settings, setting, create_full_block_group_id
 
 
 logger = logging.getLogger(__name__)
@@ -74,8 +74,9 @@ def input_pre_processor(settings):
 
             logger.info("Reading csv file %s" % data_file_path)
             df = pd.read_csv(data_file_path, comment='#')
-            if 'block_group_id' in df.columns:
-                df['block_group_id'] = df['block_group_id'].astype(str)
+            
+            if 'block group' in df.columns:
+                df = create_full_block_group_id(df)
 
             logger.info("input file columns: %s" % df.columns.values)
 
