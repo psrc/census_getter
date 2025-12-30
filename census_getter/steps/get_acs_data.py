@@ -131,7 +131,6 @@ def get_acs_data(settings, configs_dir):
     acs_table.reset_index(inplace = True)
     inject.add_table('all_acs', acs_table)
     controls_table = create_controls(spec)
+    controls_table = create_full_block_group_id(controls_table)
     inject.add_table('combined_acs', controls_table)
-    create_full_block_group_id('combined_acs')
-
     print ('done')
