@@ -10,9 +10,10 @@
 # State, Counties & Year to get ACS data. Will use 5 year ACS by default. 
 state: 53
 counties: ['035', '033', '053', '061']
-pums_year: 2018
 census_year: 2018
+pums_year: 2018
 tract: None
+
 # Must create Env Variable holding census key. Put name of Var here:
 census_key: CENSUS_KEY
 
@@ -25,11 +26,11 @@ hh_tract_size_attr: "B08201_001E"
 pers_bg_size_attr: "B01001_001E"
 pers_tract_size_attr: "B01003_001E"
 
-
 # Local Data
 # ------------------------------------------------------------------
 # Provide non-Census data for use in expression files
 data_dir: data
+output_dir: output
 
 input_table_list:
   - tablename: ofm_control_totals
@@ -39,39 +40,23 @@ input_table_list:
 
 pums_table_list:
   - tablename: pums_hh
-    filename : psam_h53.csv
+    filename: psam_h53.csv
   - tablename: pums_person
     filename: psam_p53.csv
   - tablename: puma_geog_lookup
     filename: puma_geog_lookup.csv
 
-# For local data, fill NaN values; use None to leave NaNs
+output_table_list:
+  - tablename: all_input_data
+    filename: all_input_data.csv
+
 nan_fill: 0
 
-
-# Output Tables
-# ------------------------------------------------------------------
-# output_tables can specify either a list of output tables to include or to skip
-# if neither is specified, then no tables will be written
-
-output_tables:
-  action: include
-  tables:
-    - seed_households
-    - seed_persons
-    - all_acs
-    - combined_acs
-    - all_input_data
-    - ofm_controls
-
-
-# Steps for base mode
-# ------------------------------------------------------------------
-run_list:
-  steps:
-    - pums_download
-    - input_pre_processor
-    - prepare_pums
-    - get_acs_data
-    - apply_acs_shares
-    - write_tables
+# pypyr steps to run
+steps:
+ - steps.pums_download
+ - steps.load_data
+ - steps.prepare_pums
+ - steps.get_acs_data
+ - steps.apply_acs_shares
+ - steps.write_tables

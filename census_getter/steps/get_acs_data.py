@@ -1,20 +1,16 @@
-
-import logging
 import os
 import re
 
 import pandas as pd
 import numpy as np
 
-from activitysim.core import inject
-from activitysim.core import pipeline
+from util.util import Util
+from util.census_helpers import Census
 
-from .. util import setting, create_full_block_group_id, create_block_group_id
-from .. census_helpers import Census
+util = Util()
+settings = util.settings
 
-logger = logging.getLogger(__name__)
-
-def call_census_api(county, spec, settings):
+def call_census_api(county, spec):
         state = settings['state']
         census_year = settings['census_year'] 
         if settings['tract'] ==  'None':
@@ -57,7 +53,7 @@ def call_census_api(county, spec, settings):
         return all_acs
 
 def create_controls(spec):
-        locals_d = {'df' : inject.get_table('all_acs').to_frame()}
+        locals_d = {'df' : util.get_table('all_acs')}
         
         le = []
         
@@ -119,18 +115,22 @@ def to_series(x, target=None):
 
         return x
 
-@inject.step()
-def get_acs_data(settings, configs_dir):
-    expression_file_path = os.path.join(configs_dir,settings['controls_expression_file'])
+def get_acs_data():
+    print("Getting ACS data from Census API...")
+    data_dir = util.get_data_dir()
+    expression_file_path = os.path.join(data_dir,settings['controls_expression_file'])
     spec = read_spec(expression_file_path)
     df_list = []
     for county in settings['counties']:
-        df = call_census_api(county, spec, settings)
+        df = call_census_api(county, spec)
         df_list.append(df)
     acs_table = pd.concat(df_list) 
     acs_table.reset_index(inplace = True)
-    inject.add_table('all_acs', acs_table)
+    util.save_table('all_acs', acs_table)
     controls_table = create_controls(spec)
-    controls_table = create_full_block_group_id(controls_table)
-    inject.add_table('combined_acs', controls_table)
-    print ('done')
+    util.save_table('combined_acs', controls_table)
+    util.create_full_block_group_id('combined_acs')
+
+def run_step(context):
+    get_acs_data()
+    return context

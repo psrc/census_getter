@@ -1,25 +1,15 @@
 [project]
 name = "census-getter"
-version = "0.0.1"
-description = "ACS Data to Pandas Dataframes"
-authors = [
-    {name = "PSRC", email = "scoe@psrc.org"}
-]
-license = {text = "MIT"}
+version = "0.1.0"
+description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10, <3.12"
+requires-python = ">=3.11"
 dependencies = [
-    "activitysim==1.2.1",
-    "census",
-    "numpy==1.23.4",
-    "setuptools",
-    "us"
+    "census>=0.8.24",
+    "iteround>=1.0.4",
+    "pandas>=2.3.3",
+    "pypyr>=5.9.1",
+    "pyyaml>=6.0.3",
+    "tables>=3.10.2",
+    "us>=3.2.0",
 ]
-
-[project.scripts]
-census-getter = "census_getter.cli.main:main"
-
-[tool.uv] # <--- Added the correct table header
-package = true # <--- Now correctly scoped under [tool.uv]
-
-

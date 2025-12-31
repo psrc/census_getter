@@ -1,18 +1,12 @@
-import logging
+from util.util import Util
 import us
 import os
 from zipfile import ZipFile
 import io
 from urllib.request import urlopen
 
-from activitysim.core import inject
-
-from .. util import data_dir_from_settings, setting 
-
-
-logger = logging.getLogger(__name__)
-
-
+util = Util()
+settings = util.settings
 
 def get_data(census_year, pums_table, state_id_str, state_abbr, overwrite=False):
     """
@@ -26,7 +20,7 @@ def get_data(census_year, pums_table, state_id_str, state_abbr, overwrite=False)
         state_abbr (str): State abbreviation in lowercase.
         overwrite (bool): If True, delete existing file and download new one.
     """
-    data_dir = data_dir_from_settings()
+    data_dir = settings['data_dir']
     file_name = f"psam_{pums_table}{state_id_str}.csv"
     file_path = os.path.join(data_dir, file_name)
 
@@ -44,15 +38,10 @@ def get_data(census_year, pums_table, state_id_str, state_abbr, overwrite=False)
     archive.extract(file_name, data_dir)
     print(f"Downloaded and extracted: {file_name} to {data_dir}")
 
-@inject.step()
-def pums_download(settings):
-    census_year = settings['pums_year']
+def run_step(context):
+    pums_year = settings['pums_year']
     state_id_str = str(settings['state'])
     state_abbr = us.states.mapping('fips', 'abbr')[state_id_str].lower()
-    
-    # download person table
-    get_data(census_year, 'p', state_id_str, state_abbr,overwrite=False)
-    
-    # download household table
-    get_data(census_year, 'h', state_id_str, state_abbr,overwrite=False)
-    
+    get_data(pums_year,'h',state_id_str,state_abbr,overwrite=False)
+    get_data(pums_year,'p',state_id_str,state_abbr,overwrite=False)
+    return context

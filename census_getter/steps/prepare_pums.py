@@ -1,30 +1,25 @@
-import logging
-import os
-import re
-
 import pandas as pd
-import numpy as np
+from util.util import Util
 
-from activitysim.core import inject
-from activitysim.core import pipeline
-from activitysim.core import assign
+util = Util()
+settings = util.settings
 
-from .. util import setting, create_block_group_id
-from ..census_helpers import Census
 
-logger = logging.getLogger(__name__)
+def get_filename(tablename):
+    # Returns the filename for a given table from settings.yaml
+    table_list = settings.get('pums_table_list', [])
+    for table in table_list:
+        if table['tablename'] == tablename:
+            return table['filename']
 
-@inject.step()
-def prepare_pums(settings, configs_dir):
+def prepare_pums():
     """
-    Combine and filter PUMS data for use with other data and populationsim format
+    Combine and filter PUMS data for use with other data
     """
 
-    pums_hh = inject.get_table('pums_hh').to_frame()
-    pums_person = inject.get_table('pums_person').to_frame()
-
-    # Add Census geography to PUMA
-    puma_geog_lookup = inject.get_table('puma_geog_lookup').to_frame()
+    pums_hh = pd.read_csv(f"{util.get_data_dir()}/{get_filename('pums_hh')}",low_memory=False)
+    pums_person = pd.read_csv(f"{util.get_data_dir()}/{get_filename('pums_person')}",low_memory=False)
+    puma_geog_lookup = pd.read_csv(f"{util.get_data_dir()}/{get_filename('puma_geog_lookup')}",low_memory=False)
 
     # Filter for records that exist only within the geo_cross_walk
     pums_hh = pums_hh[pums_hh['PUMA'].isin(puma_geog_lookup['PUMA'])]
@@ -45,7 +40,7 @@ def prepare_pums(settings, configs_dir):
     # Generate unique household ID "hhnum"
     pums_hh['hhnum'] = [i+1 for i in range(len(pums_hh))]
     pums_person['hhnum'] = 0
-    pums_person.hhnum.update(pums_hh.hhnum)
+    pums_person.update({'hhnum':pums_hh.hhnum})
 
     # Calculate household workers based on person records
     pums_person['is_worker'] = 0
@@ -53,7 +48,7 @@ def prepare_pums(settings, configs_dir):
     worker_count = pums_person.groupby('hhnum').sum()[['is_worker']]
     pums_hh['worker_count'] = -99
     pums_hh.index = pums_hh.hhnum
-    pums_hh.worker_count.update(worker_count.is_worker)
+    pums_hh.update({'worker_count': worker_count.is_worker})
 
     # Combine households with workers >= 3
     #pums_hh.loc[pums_hh['worker_count'] >= 3,'worker_count'] = 3
@@ -62,7 +57,14 @@ def prepare_pums(settings, configs_dir):
     # adjust income to 2022. 
     pums_hh['HINCP'] = pums_hh.HINCP * (pums_hh.ADJINC/1000000)
 
+    # drop serialno to save memory
+    pums_hh = pums_hh.drop(columns=['SERIALNO'])
+    pums_person = pums_person.drop(columns=['SERIALNO'])
     
-    inject.add_table("seed_persons", pums_person)
-    inject.add_table("seed_households", pums_hh)
+    util.save_table("seed_persons", pums_person)
+    util.save_table("seed_households", pums_hh)
 
+def run_step(context):
+    print("Preparing PUMS data...")
+    prepare_pums()
+    return context

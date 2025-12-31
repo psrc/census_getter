@@ -1,9 +1,5 @@
 description,target,expression
 id,block_group_id,df.block_group_id
-state,state,df.state
-county,county,df.county
-tract,tract,df.tract
-block_group,block_group,df['block group']
 gender_total,_gender_total,df.male + df.female
 male,male,(df.male/_gender_total) * df.HHP2018
 female,female,(df.female/_gender_total) * df.HHP2018
