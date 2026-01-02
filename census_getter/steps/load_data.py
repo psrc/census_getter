@@ -1,6 +1,6 @@
 import pandas as pd
 import yaml
-from util.util import Util
+from census_getter.util import Util
 
 util = Util()
 settings = util.settings

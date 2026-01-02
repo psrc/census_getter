@@ -1,5 +1,5 @@
 import pandas as pd
-from util.util import Util
+from census_getter.util import Util
 
 util = Util()
 settings = util.settings

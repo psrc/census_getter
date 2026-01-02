@@ -1,9 +1,10 @@
-from util.util import Util
 import us
 import os
 from zipfile import ZipFile
 import io
 from urllib.request import urlopen
+
+from census_getter.util import Util
 
 util = Util()
 settings = util.settings

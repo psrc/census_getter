@@ -17,8 +17,8 @@ tract: None
 # Must create Env Variable holding census key. Put name of Var here:
 census_key: CENSUS_KEY
 
-controls_expression_file: census_getter_expressions.csv
-apply_acs_shares_expression_file: ofm_shares.csv
+controls_expression_file: configs/census_getter_expressions.csv
+apply_acs_shares_expression_file: configs/ofm_shares.csv
 
 # Relate block groups with tracts
 hh_bg_size_attr: "B11001_001E"
@@ -54,9 +54,9 @@ nan_fill: 0
 
 # pypyr steps to run
 steps:
- - steps.pums_download
- - steps.load_data
- - steps.prepare_pums
- - steps.get_acs_data
- - steps.apply_acs_shares
- - steps.write_tables
+ - census_getter.steps.pums_download
+ - census_getter.steps.load_data
+ - census_getter.steps.prepare_pums
+ - census_getter.steps.get_acs_data
+ - census_getter.steps.apply_acs_shares
+ - census_getter.steps.write_tables

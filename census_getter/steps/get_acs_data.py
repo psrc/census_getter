@@ -4,8 +4,8 @@ import re
 import pandas as pd
 import numpy as np
 
-from util.util import Util
-from util.census_helpers import Census
+from census_getter.util import Util
+from census_getter.census_helpers import Census
 
 util = Util()
 settings = util.settings
@@ -118,7 +118,7 @@ def to_series(x, target=None):
 def get_acs_data():
     print("Getting ACS data from Census API...")
     data_dir = util.get_data_dir()
-    expression_file_path = os.path.join(data_dir,settings['controls_expression_file'])
+    expression_file_path = settings['controls_expression_file']
     spec = read_spec(expression_file_path)
     df_list = []
     for county in settings['counties']:

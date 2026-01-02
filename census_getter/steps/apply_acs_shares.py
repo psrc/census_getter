@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from iteround import saferound
 
-from util.util import Util
+from census_getter.util import Util
 
 util = Util()
 settings = util.settings
@@ -51,7 +51,7 @@ def round_grouped_columns(df, spec, tot_cols):
 def apply_acs_shares():
     # Load expression spec
     data_dir = util.get_data_dir()
-    expression_file_path = os.path.join(data_dir, settings['apply_acs_shares_expression_file'])
+    expression_file_path = settings['apply_acs_shares_expression_file']
     spec = read_spec(expression_file_path)
 
     # get tables and merge into one dataframe

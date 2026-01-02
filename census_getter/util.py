@@ -4,7 +4,7 @@ import yaml
 
 
 class Util:
-    def __init__(self, settings_path='settings.yaml'):
+    def __init__(self, settings_path='configs/settings.yaml'):
         """
         Initialize Util with settings loaded from a YAML file.
         """

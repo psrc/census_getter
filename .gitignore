@@ -8,6 +8,3 @@ wheels/
 
 # Virtual environments
 .venv
-census_getter/scratch.ipynb
-census_getter/data/psam_h53.csv
-census_getter/data/psam_p53.csv
