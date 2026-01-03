@@ -4,12 +4,18 @@ import yaml
 
 
 class Util:
-    def __init__(self, settings_path='configs/settings.yaml'):
+    def __init__(self, settings_path='configs'):
         """
         Initialize Util with settings loaded from a YAML file.
         """
-        with open(settings_path, 'r') as file:
+        self.settings_path = settings_path
+        
+        with open(f"{self.settings_path}/settings.yaml", 'r') as file:
             self.settings = yaml.safe_load(file)
+
+    def get_settings_path(self):
+        # Returns the path to the settings directory
+        return self.settings_path
 
     def get_data_dir(self):
         # Returns the data directory path from settings.yaml

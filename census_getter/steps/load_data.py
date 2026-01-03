@@ -2,11 +2,8 @@ import pandas as pd
 import yaml
 from census_getter.util import Util
 
-util = Util()
-settings = util.settings
 
-
-def load_tables():
+def load_tables(util):
     # Creates an HDF5 file and loads tables into it
     table_list = util.get_table_list()
     with pd.HDFStore(f"{util.get_data_dir()}/pipeline.h5", mode='w') as h5store:
@@ -20,5 +17,6 @@ def load_tables():
 def run_step(context):
     # pypyr step to run load_data.py
     print("Loading data into HDF5 store...")
-    load_tables()
+    util = Util(settings_path=context['configs_dir'])
+    load_tables(util)
     return context

@@ -4,8 +4,6 @@ from iteround import saferound
 
 from census_getter.util import Util
 
-util = Util()
-settings = util.settings
 
 def read_spec(fname):
     cfg = pd.read_csv(fname, comment='#')
@@ -48,14 +46,15 @@ def round_grouped_columns(df, spec, tot_cols):
             df[group_cols] = df[group_cols].astype(int)
     return df
 
-def apply_acs_shares():
+def apply_acs_shares(util):
     # Load expression spec
     data_dir = util.get_data_dir()
-    expression_file_path = settings['apply_acs_shares_expression_file']
+    expression_file = util.settings['apply_acs_shares_expression_file']
+    expression_file_path = os.path.join(util.get_settings_path(), expression_file)
     spec = read_spec(expression_file_path)
 
     # get tables and merge into one dataframe
-    input_table_list = [settings['input_table_list'][i]['tablename'] for i in range(len(settings['input_table_list']))]
+    input_table_list = [util.settings['input_table_list'][i]['tablename'] for i in range(len(util.settings['input_table_list']))]
     df = pd.DataFrame()
     for table_name in input_table_list:
         util.create_full_block_group_id(table_name)
@@ -80,5 +79,6 @@ def apply_acs_shares():
 
 def run_step(context):
     print("Applying OFM shares to ACS data...")
-    apply_acs_shares()
+    util = Util(settings_path=context['configs_dir'])
+    apply_acs_shares(util)
     return context

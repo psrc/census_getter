@@ -37,3 +37,7 @@ uv run run.py
     uv pip install -e "C:\your_local_path_to_where_you_cloned_census_getter\census_getter"
     uv run run.py
     ```
+    6. Use -c argument if you want to use a different configs folder and settings.yaml:
+    ```
+    uv run run.py -c alt_configs_folder
+    ```

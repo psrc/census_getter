@@ -7,18 +7,16 @@ import numpy as np
 from census_getter.util import Util
 from census_getter.census_helpers import Census
 
-util = Util()
-settings = util.settings
 
-def call_census_api(county, spec):
-        state = settings['state']
-        census_year = settings['census_year'] 
-        if settings['tract'] ==  'None':
+def call_census_api(county, spec, util):
+        state = util.settings['state']
+        census_year = util.settings['census_year'] 
+        if util.settings['tract'] ==  'None':
             tract = None
         else:
-            tract = settings['tract']
+            tract = util.settings['tract']
 
-        c = Census(os.environ[settings['census_key']])
+        c = Census(os.environ[util.settings['census_key']])
 
         hh_bg_columns = get_column_names('block_group', 'household', spec)
         hh_tract_columns = get_column_names('tract', 'household', spec)
@@ -29,8 +27,8 @@ def call_census_api(county, spec):
         h_acs = c.block_group_and_tract_query(
             hh_bg_columns, hh_tract_columns, state, county,
             merge_columns=['tract', 'county', 'state'],
-            block_group_size_attr=settings['hh_bg_size_attr'],
-            tract_size_attr=settings['hh_tract_size_attr'],
+            block_group_size_attr=util.settings['hh_bg_size_attr'],
+            tract_size_attr=util.settings['hh_tract_size_attr'],
             tract=tract,
             year=census_year)
         
@@ -43,8 +41,8 @@ def call_census_api(county, spec):
         p_acs = c.block_group_and_tract_query(
             pers_bg_columns, pers_tract_columns, state, county,
             merge_columns=['tract', 'county', 'state'],
-            block_group_size_attr=settings['pers_bg_size_attr'],
-            tract_size_attr=settings['pers_tract_size_attr'],
+            block_group_size_attr=util.settings['pers_bg_size_attr'],
+            tract_size_attr=util.settings['pers_tract_size_attr'],
             tract=tract,
             year = census_year)
 
@@ -52,7 +50,7 @@ def call_census_api(county, spec):
         
         return all_acs
 
-def create_controls(spec):
+def create_controls(spec, util):
         locals_d = {'df' : util.get_table('all_acs')}
         
         le = []
@@ -115,22 +113,24 @@ def to_series(x, target=None):
 
         return x
 
-def get_acs_data():
+def get_acs_data(util):
     print("Getting ACS data from Census API...")
     data_dir = util.get_data_dir()
-    expression_file_path = settings['controls_expression_file']
+    expression_file = util.settings['controls_expression_file']
+    expression_file_path = os.path.join(util.get_settings_path(), expression_file)
     spec = read_spec(expression_file_path)
     df_list = []
-    for county in settings['counties']:
-        df = call_census_api(county, spec)
+    for county in util.settings['counties']:
+        df = call_census_api(county, spec, util)
         df_list.append(df)
     acs_table = pd.concat(df_list) 
     acs_table.reset_index(inplace = True)
     util.save_table('all_acs', acs_table)
-    controls_table = create_controls(spec)
+    controls_table = create_controls(spec,util)
     util.save_table('combined_acs', controls_table)
     util.create_full_block_group_id('combined_acs')
 
 def run_step(context):
-    get_acs_data()
+    util = Util(settings_path=context['configs_dir'])
+    get_acs_data(util)
     return context

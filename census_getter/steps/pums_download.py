@@ -6,10 +6,8 @@ from urllib.request import urlopen
 
 from census_getter.util import Util
 
-util = Util()
-settings = util.settings
 
-def get_data(census_year, pums_table, state_id_str, state_abbr, overwrite=False):
+def get_data(census_year, pums_table, state_id_str, state_abbr, util, overwrite=False):
     """
     Downloads PUMS data from the Census FTP and saves it as a CSV file in the data directory.
     If the file already exists, it will not download unless 'overwrite' is set to True.
@@ -21,7 +19,7 @@ def get_data(census_year, pums_table, state_id_str, state_abbr, overwrite=False)
         state_abbr (str): State abbreviation in lowercase.
         overwrite (bool): If True, delete existing file and download new one.
     """
-    data_dir = settings['data_dir']
+    data_dir = util.settings['data_dir']
     file_name = f"psam_{pums_table}{state_id_str}.csv"
     file_path = os.path.join(data_dir, file_name)
 
@@ -40,9 +38,11 @@ def get_data(census_year, pums_table, state_id_str, state_abbr, overwrite=False)
     print(f"Downloaded and extracted: {file_name} to {data_dir}")
 
 def run_step(context):
-    pums_year = settings['pums_year']
-    state_id_str = str(settings['state'])
+    print("Downloading PUMS data...")
+    util = Util(settings_path=context['configs_dir'])
+    pums_year = util.settings['pums_year']
+    state_id_str = str(util.settings['state'])
     state_abbr = us.states.mapping('fips', 'abbr')[state_id_str].lower()
-    get_data(pums_year,'h',state_id_str,state_abbr,overwrite=False)
-    get_data(pums_year,'p',state_id_str,state_abbr,overwrite=False)
+    get_data(pums_year,'h',state_id_str,state_abbr,util,overwrite=False)
+    get_data(pums_year,'p',state_id_str,state_abbr,util,overwrite=False)
     return context

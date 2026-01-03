@@ -1,32 +1,29 @@
 import pandas as pd
 from census_getter.util import Util
 
-util = Util()
-settings = util.settings
 
-
-def get_filename(tablename):
+def get_filename(tablename, util):
     # Returns the filename for a given table from settings.yaml
-    table_list = settings.get('pums_table_list', [])
+    table_list = util.settings.get('pums_table_list', [])
     for table in table_list:
         if table['tablename'] == tablename:
             return table['filename']
 
-def prepare_pums():
+def prepare_pums(util):
     """
     Combine and filter PUMS data for use with other data
     """
 
-    pums_hh = pd.read_csv(f"{util.get_data_dir()}/{get_filename('pums_hh')}",low_memory=False)
-    pums_person = pd.read_csv(f"{util.get_data_dir()}/{get_filename('pums_person')}",low_memory=False)
-    puma_geog_lookup = pd.read_csv(f"{util.get_data_dir()}/{get_filename('puma_geog_lookup')}",low_memory=False)
+    pums_hh = pd.read_csv(f"{util.get_data_dir()}/{get_filename('pums_hh', util)}",low_memory=False)
+    pums_person = pd.read_csv(f"{util.get_data_dir()}/{get_filename('pums_person', util)}",low_memory=False)
+    puma_geog_lookup = pd.read_csv(f"{util.get_data_dir()}/{get_filename('puma_geog_lookup', util)}",low_memory=False)
 
     # Filter for records that exist only within the geo_cross_walk
     pums_hh = pums_hh[pums_hh['PUMA'].isin(puma_geog_lookup['PUMA'])]
     pums_person = pums_person[pums_person['PUMA'].isin(puma_geog_lookup['PUMA'])]
 
     # Filter for households without group quarters
-    if settings['census_year'] > 2020:
+    if util.settings['census_year'] > 2020:
         pums_hh = pums_hh[pums_hh['TYPEHUGQ'].isin([1])]
     else:
         pums_hh = pums_hh[pums_hh['TYPE'].isin([1,2])]
@@ -66,5 +63,6 @@ def prepare_pums():
 
 def run_step(context):
     print("Preparing PUMS data...")
-    prepare_pums()
+    util = Util(settings_path=context['configs_dir'])
+    prepare_pums(util)
     return context

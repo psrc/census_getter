@@ -17,8 +17,8 @@ tract: None
 # Must create Env Variable holding census key. Put name of Var here:
 census_key: CENSUS_KEY
 
-controls_expression_file: configs/census_getter_expressions.csv
-apply_acs_shares_expression_file: configs/ofm_shares.csv
+controls_expression_file: census_getter_expressions.csv
+apply_acs_shares_expression_file: ofm_shares.csv
 
 # Relate block groups with tracts
 hh_bg_size_attr: "B11001_001E"
