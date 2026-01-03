@@ -1,5 +1,4 @@
 import pandas as pd
-import yaml
 from census_getter.util import Util
 
 

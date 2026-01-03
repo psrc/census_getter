@@ -1,11 +1,5 @@
-import os
 from census_getter.util import Util
 
-
-def create_output_dir(util):
-    output_dir = util.get_output_dir()
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
 
 def write_tables(util):
     # Write prepared tables to CSV files
@@ -19,6 +13,5 @@ def write_tables(util):
 def run_step(context):
     print("Writing output tables...")
     util = Util(settings_path=context['configs_dir'])
-    create_output_dir(util)
     write_tables(util)
     return context

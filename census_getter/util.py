@@ -1,6 +1,7 @@
 import pandas as pd
 import yaml
-
+from pathlib import Path
+import os
 
 
 class Util:
@@ -12,6 +13,10 @@ class Util:
         
         with open(f"{self.settings_path}/settings.yaml", 'r') as file:
             self.settings = yaml.safe_load(file)
+
+        # create data and output directories if they don't exist
+        create_directory(path=self.get_data_dir())
+        create_directory(path=self.get_output_dir())
 
     def get_settings_path(self):
         # Returns the path to the settings directory
@@ -56,3 +61,14 @@ class Util:
         if 'nan_fill' in self.settings:
             df = df.fillna(self.settings['nan_fill'])
         return df
+    
+def create_directory(path_parts: list=None, path: str=None) -> Path:
+    """Create a directory if it doesn't exist."""
+    if path_parts:
+        path = Path(os.path.join(*path_parts))
+    else:
+        path_parts = path
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+        print(f"Directory {path} created.")
