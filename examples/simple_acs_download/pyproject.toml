@@ -1,0 +1,15 @@
+[project]
+name = "census-getter-example"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "census>=0.8.24",
+    "iteround>=1.0.4",
+    "pandas>=2.3.3",
+    "pypyr>=5.9.1",
+    "pyyaml>=6.0.3",
+    "tables>=3.10.2",
+    "us>=3.2.0",
+]
