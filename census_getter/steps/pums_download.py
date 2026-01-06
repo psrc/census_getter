@@ -7,7 +7,7 @@ from urllib.request import urlopen
 from census_getter.util import Util
 
 
-def get_data(census_year, pums_table, state_id_str, state_abbr, util, overwrite=False):
+def get_data(census_year, pums_table, state_id_str, state_abbr, util, overwrite=True):
     """
     Downloads PUMS data from the Census FTP and saves it as a CSV file in the data directory.
     If the file already exists, it will not download unless 'overwrite' is set to True.
