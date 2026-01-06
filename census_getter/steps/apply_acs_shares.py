@@ -65,6 +65,7 @@ def apply_acs_shares(util):
     df = df.merge(combined_acs, on='block_group_id', how='left')
     df = df.set_index('block_group_id')
     df = df.astype(float)
+    util.save_table('all_input_data', df)
 
     # evaluate expressions to create new columns
     df = eval_expressions(spec, df)
@@ -75,7 +76,7 @@ def apply_acs_shares(util):
     df = round_grouped_columns(df, spec, tot_cols)
 
     # save final dataframe
-    util.save_table('all_input_data', df)
+    util.save_table('ofm_controls', df)
 
 def run_step(context):
     print("Applying OFM shares to ACS data...")

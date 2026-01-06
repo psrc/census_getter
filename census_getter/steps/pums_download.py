@@ -43,6 +43,6 @@ def run_step(context):
     pums_year = util.settings['pums_year']
     state_id_str = str(util.settings['state'])
     state_abbr = us.states.mapping('fips', 'abbr')[state_id_str].lower()
-    get_data(pums_year,'h',state_id_str,state_abbr,util,overwrite=False)
-    get_data(pums_year,'p',state_id_str,state_abbr,util,overwrite=False)
+    get_data(pums_year,'h',state_id_str,state_abbr,util,overwrite=True)
+    get_data(pums_year,'p',state_id_str,state_abbr,util,overwrite=True)
     return context

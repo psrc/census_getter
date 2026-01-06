@@ -43,6 +43,7 @@ class Util:
             return h5store.get(table_name)
 
     def save_table(self, table_name, df):
+        print(f"Saving table {table_name} to HDF5 store...")
         with pd.HDFStore(f"{self.get_data_dir()}/pipeline.h5", mode='a') as h5store:
             h5store.put(table_name, df, format='table')
 
