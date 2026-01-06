@@ -47,20 +47,27 @@ class Util:
         with pd.HDFStore(f"{self.get_data_dir()}/pipeline.h5", mode='a') as h5store:
             h5store.put(table_name, df, format='table')
 
-    def create_full_block_group_id(self, my_table):
-        df = self.get_table(my_table)
-        cols = ['state', 'county', 'tract', 'block group']
-        # concatenate to create full block group id using zfill to ensure proper lengths
-        df['block_group_id'] = df['state'].astype(str).str.zfill(2) + \
-                               df['county'].astype(str).str.zfill(3) + \
-                               df['tract'].astype(str).str.zfill(6) + \
-                               df['block group'].astype(str)
-        df = df.drop(columns=cols)
-        self.save_table(my_table, df)
-
     def fill_nan_values(self, df):
         if 'nan_fill' in self.settings:
             df = df.fillna(self.settings['nan_fill'])
+        return df
+    
+    def create_full_block_group_id(self, df):
+        cols = ['state', 'county', 'tract', 'block group']
+        # concatenate to create full block group id using zfill to ensure proper lengths
+        df['block_group_id'] = df['state'].astype(str).str.zfill(2) + \
+                            df['county'].astype(str).str.zfill(3) + \
+                            df['tract'].astype(str).str.zfill(6) + \
+                            df['block group'].astype(str)
+        df = df.drop(columns=cols)
+        df['block_group_id'] = df['block_group_id'].astype('int64')
+        return df
+
+    def block_group_id_exists(self, df):
+        return 'block_group_id' in df.columns
+
+    def convert_col_to_int64(self, df, col_name):
+        df[col_name] = df[col_name].astype('int64')
         return df
     
 def create_directory(path_parts: list=None, path: str=None) -> Path:

@@ -9,8 +9,13 @@ def load_tables(util):
         for table in table_list:
             print(f"Loading table: {table['tablename']} from file: {table['filename']}")
             df = pd.read_csv(f"{util.get_data_dir()}/{table['filename']}",low_memory=False)
-                        # fill nan values
+            # fill nan values
             df = util.fill_nan_values(df)
+            # check if block_group_id exists, if not create it
+            if not util.block_group_id_exists(df):
+                df = util.create_full_block_group_id(df)
+            else:
+                df = util.convert_col_to_int64(df, 'block_group_id')
             h5store.put(table['tablename'], df, format='table')
 
 def run_step(context):

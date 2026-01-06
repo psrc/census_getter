@@ -57,7 +57,6 @@ def apply_acs_shares(util):
     input_table_list = [util.settings['input_table_list'][i]['tablename'] for i in range(len(util.settings['input_table_list']))]
     df = pd.DataFrame()
     for table_name in input_table_list:
-        util.create_full_block_group_id(table_name)
         table = util.get_table(table_name)
         # merge into one dataframe
         df = df.merge(table, on='block_group_id', how='outer') if not df.empty else table

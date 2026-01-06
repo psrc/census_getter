@@ -127,8 +127,8 @@ def get_acs_data(util):
     acs_table.reset_index(inplace = True)
     util.save_table('all_acs', acs_table)
     controls_table = create_controls(spec,util)
+    controls_table = util.create_full_block_group_id(controls_table)
     util.save_table('combined_acs', controls_table)
-    util.create_full_block_group_id('combined_acs')
 
 def run_step(context):
     util = Util(settings_path=context['configs_dir'])

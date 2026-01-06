@@ -53,10 +53,6 @@ def prepare_pums(util):
     # we are using 2021 5 year pums to have consistent PUMs geography (2010). 
     # adjust income to 2022. 
     pums_hh['HINCP'] = pums_hh.HINCP * (pums_hh.ADJINC/1000000)
-
-    # drop serialno to save memory
-    pums_hh = pums_hh.drop(columns=['SERIALNO'])
-    pums_person = pums_person.drop(columns=['SERIALNO'])
     
     util.save_table("seed_persons", pums_person)
     util.save_table("seed_households", pums_hh)
