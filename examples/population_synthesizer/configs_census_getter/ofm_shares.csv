@@ -1,0 +1,64 @@
+description,target,expression
+id,block_group_id,df.block_group_id
+gender_total,_gender_total,df.male + df.female
+male,male,(df.male/_gender_total) * df.household_population
+female,female,(df.female/_gender_total) * df.household_population
+_cars_total,_cars_total,df.cars_none + df.cars_one+df.cars_two+df.cars_three_or_more
+cars_none,cars_none,(df.cars_none/_cars_total)*df.occupied_housing_units
+cars_one,cars_one,(df.cars_one/_cars_total)*df.occupied_housing_units
+cars_two ,cars_two ,(df.cars_two/_cars_total)*df.occupied_housing_units
+cars_three_or_more,cars_three_or_more,(df.cars_three_or_more/_cars_total)*df.occupied_housing_units
+_income_total,_income_total,df.income_lt25 + df.income_gt25_lt50 + df.income_gt50_lt75 + df.income_gt75_lt100 +  df.income_gt100_lt200 + df.income_gt200
+income_lt25,income_lt25,(df.income_lt25/_income_total)*df.occupied_housing_units
+income_gt25_lt50,income_gt25_lt50,(df.income_gt25_lt50/_income_total)*df.occupied_housing_units
+income_gt50_lt75,income_gt50_lt75,(df.income_gt50_lt75/_income_total)*df.occupied_housing_units
+income_gt75_lt100,income_gt75_lt100,(df.income_gt75_lt100/_income_total)*df.occupied_housing_units
+income_gt100_lt200,income_gt100_lt200,(df.income_gt100_lt200/_income_total)*df.occupied_housing_units
+income_gt200,income_gt200,(df.income_gt200/_income_total)*df.occupied_housing_units
+_hh_size_total,_hh_size_total,df.HH1p + df.HH2p + df.HH3p + df.HH4p + df.HH5p + df.HH6p + df.HH7p
+hh_size_1,hh_size_1,(df.HH1p/_hh_size_total)*df.occupied_housing_units
+hh_size_2,hh_size_2,(df.HH2p/_hh_size_total)*df.occupied_housing_units
+hh_size_3,hh_size_3,(df.HH3p/_hh_size_total)*df.occupied_housing_units
+hh_size_4,hh_size_4,(df.HH4p/_hh_size_total)*df.occupied_housing_units
+hh_size_5,hh_size_5,(df.HH5p/_hh_size_total)*df.occupied_housing_units
+hh_size_6,hh_size_6,(df.HH6p/_hh_size_total)*df.occupied_housing_units
+hh_size_7_plus,hh_size_7_plus,(df.HH7p/_hh_size_total)*df.occupied_housing_units
+_workers_tot,_workers_tot,df.workers_0 + df.workers_1 + df.workers_2 + df.workers_3_plus
+workers_0,workers_0,(df.workers_0/_workers_tot) * df.occupied_housing_units
+workers_1,workers_1,(df.workers_1/_workers_tot) * df.occupied_housing_units
+workers_2,workers_2,(df.workers_2/_workers_tot) * df.occupied_housing_units
+workers_3_plus,workers_3_plus,(df.workers_3_plus/_workers_tot) * df.occupied_housing_units
+_school_tot,_school_tot,df.school_yes + df.school_no
+school_yes,school_yes,(df.school_yes/_school_tot) * df.household_population
+school_no,school_no,(df.school_no/_school_tot) * df.household_population
+_race_total,_race_total,df.white_hispanic + df.non_white_hispanic + df.white_non_hispanic + df.black_non_hispanic + df.other_non_hispanic + df.asian_non_hispanic + df.two_or_more_races_non_hispanic
+_age_total,_age_total,df.age_5_and_under + df.age_5_to_9 + df.age_10_to_14 + df.age_15_to_17 + df.age_18_to_24 + df.age_25_to_34 +df.age_35_to_44 + df.age_45_to_54 + df.age_55_to_64 + df.age_65_to_74 + df.age_75_to_84 + df.age_above_85
+age_5_and_under,age_5_and_under,(df.age_5_and_under/_age_total) * df.household_population
+age_5_to_9,age_5_to_9,(df.age_5_to_9/_age_total) * df.household_population
+age_10_to_14,age_10_to_14,(df.age_10_to_14/_age_total) * df.household_population
+age_15_to_17,age_15_to_17,(df.age_15_to_17/_age_total) * df.household_population
+age_18_to_24,age_18_to_24,(df.age_18_to_24/_age_total) * df.household_population
+age_25_to_34,age_25_to_34,(df.age_25_to_34/_age_total) * df.household_population
+age_35_to_44,age_35_to_44,(df.age_35_to_44/_age_total) * df.household_population
+age_45_to_54,age_45_to_54,(df.age_45_to_54/_age_total) * df.household_population
+age_55_to_64,age_55_to_64,(df.age_55_to_64/_age_total) * df.household_population
+age_65_to_74,age_65_to_74,(df.age_65_to_74/_age_total) * df.household_population
+age_75_to_84,age_75_to_84,(df.age_75_to_84/_age_total) * df.household_population
+age_above_85,age_above_85,(df.age_above_85/_age_total) * df.household_population
+_workers_total,_workers_total,df.is_worker + df.non_worker
+is_worker,is_worker,(df.is_worker/_workers_total) * df.household_population
+non_worker,non_worker,(df.non_worker/_workers_total) * df.household_population
+is_family,is_family,(df.is_family/df.hh_bg_weight) * df.occupied_housing_units
+not_family,not_family,(df.not_family/df.hh_bg_weight) * df.occupied_housing_units
+hh_bg_weight,hh_bg_weight,df.occupied_housing_units
+_tenure_total,_tenure_total,df.rent + df.own
+pers_bg_weight,pers_bg_weight,df.household_population
+hh_rent,rent,(df.rent/_tenure_total)*df.occupied_housing_units
+hh_own,own,(df.own/_tenure_total)*df.occupied_housing_units
+white_hispanic,white_hispanic,(df.white_hispanic/_race_total) * df.household_population
+non_white_hispanic,non_white_hispanic,(df.non_white_hispanic/_race_total) *  df.household_population
+white_non_hispanic,white_non_hispanic,(df.white_non_hispanic/_race_total) *  df.household_population
+black_non_hispanic,black_non_hispanic,(df.black_non_hispanic/_race_total) * df.household_population
+other_non_hispanic,other_non_hispanic,(df.other_non_hispanic/_race_total) *  df.household_population
+asian_non_hispanic,asian_non_hispanic,(df.asian_non_hispanic/_race_total)* df.household_population
+two_or_more_races_non_hispanic,two_or_more_races_non_hispanic,(df.two_or_more_races_non_hispanic/_race_total)* df.household_population
