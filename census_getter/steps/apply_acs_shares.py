@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-from iteround import saferound
 
 from census_getter.util import Util
 
@@ -35,17 +34,6 @@ def tot_cols_to_list(df):
             tot_cols.append(col)
     return tot_cols
 
-def round_grouped_columns(df, spec, tot_cols):
-    for tot_col in tot_cols:
-        group_expr = spec.loc[spec['target'] == tot_col,'expression'].values[0]
-        group_cols = [col.strip().replace('df.','') for col in group_expr.split('+')]
-        for index,row in df[group_cols].iterrows():
-            round_list = row[group_cols].values.tolist()
-            round_list = saferound(round_list,places=0)
-            df.loc[index,group_cols] = round_list
-            df[group_cols] = df[group_cols].astype(int)
-    return df
-
 def apply_acs_shares(util):
     # Load expression spec
     data_dir = util.get_data_dir()
@@ -70,9 +58,9 @@ def apply_acs_shares(util):
     df = eval_expressions(spec, df)
     df = util.fill_nan_values(df)
 
-    # round grouped columns to ensure sums match totals
+    # drop extra columns (totals) and round final values
     tot_cols = tot_cols_to_list(df)
-    df = round_grouped_columns(df, spec, tot_cols)
+    df = df.drop(columns=tot_cols).round(0)
 
     # save final dataframe
     util.save_table('ofm_controls', df)
