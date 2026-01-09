@@ -53,6 +53,10 @@ def prepare_pums(util):
     # we are using 2021 5 year pums to have consistent PUMs geography (2010). 
     # adjust income to 2022. 
     pums_hh['HINCP'] = pums_hh.HINCP * (pums_hh.ADJINC/1000000)
+
+    # add county_id
+    pums_hh = pums_hh.merge(puma_geog_lookup[['PUMA','county_id']], on='PUMA', how='left')
+    pums_person = pums_person.merge(puma_geog_lookup[['PUMA','county_id']], on='PUMA', how='left')
     
     util.save_table("seed_persons", pums_person)
     util.save_table("seed_households", pums_hh)

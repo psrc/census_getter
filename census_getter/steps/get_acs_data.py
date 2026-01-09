@@ -130,6 +130,14 @@ def get_acs_data(util):
     controls_table = util.create_full_block_group_id(controls_table)
     util.save_table('combined_acs', controls_table)
 
+    # generate county controls if 'county_controls' is in output table list
+    output_tablenames = [table['tablename'] for table in util.settings.get('output_table_list', [])]
+    if 'county_controls' in output_tablenames:
+        print("Aggregating county-level controls...")
+        controls_table['county_id'] = controls_table['block_group_id'].astype(str).str[:5].astype(int)
+        county_controls_df = controls_table.groupby('county_id').sum().drop(columns=['block_group_id']).reset_index()
+        util.save_table('county_controls', county_controls_df)
+
 def run_step(context):
     util = Util(settings_path=context['configs_dir'])
     get_acs_data(util)

@@ -1,0 +1,129 @@
+####################################################################
+# PopulationSim Properties
+####################################################################
+
+
+# Algorithm/Software Configuration
+# ------------------------------------------------------------------
+INTEGERIZE_WITH_BACKSTOPPED_CONTROLS: True
+SUB_BALANCE_WITH_FLOAT_SEED_WEIGHTS: False
+GROUP_BY_INCIDENCE_SIGNATURE: True
+USE_SIMUL_INTEGERIZER: True
+USE_CVXPY: False
+max_expansion_factor: 30
+
+
+# Geographic Settings
+# ------------------------------------------------------------------
+#geographies: [PUMA, block_group]
+#geographies: [state, county, PUMA, tract, block_group]
+#geographies: [state, county, PUMA, block_group]
+geographies: [region,PUMA, county_id]
+seed_geography: PUMA
+
+
+# Tracing
+# ------------------------------------------------------------------
+trace_geography:
+  TAZ: 100
+  TRACT: 10200
+
+  
+# Data Directory
+# ------------------------------------------------------------------
+data_dir: data
+
+
+# Input Data Tables
+# ------------------------------------------------------------------
+# input_pre_processor input_table_list
+input_table_list:
+  - tablename: households
+    filename : seed_households.csv
+    index_col: hh_id
+    column_map:
+      hhnum: hh_id
+
+  - tablename: persons
+    filename : seed_persons.csv
+    column_map:
+      hhnum: hh_id
+      SPORDER: per_num
+
+  - tablename: geo_cross_walk
+    filename : puma_geog_lookup_cnty.csv
+
+  - tablename: county_id_control_data
+    filename : county_controls.csv
+
+
+# Reserved Column Names
+# ------------------------------------------------------------------
+household_weight_col: WGTP
+household_id_col: hh_id
+total_hh_control: num_hh
+
+
+# Control Specification File Name
+# ------------------------------------------------------------------
+control_file_name: controls.csv
+
+
+# Output Tables
+# ------------------------------------------------------------------
+# output_tables can specify either a list of output tables to include or to skip
+# if neither is specified, then no tables will be written
+
+output_tables:
+  action: include
+  tables:
+    - summary_county_id
+    - expanded_household_ids
+
+
+# Synthetic Population Output Specification
+# ------------------------------------------------------------------
+#
+
+output_synthetic_population:
+  household_id: household_id
+  households:
+    filename: synthetic_households.csv
+    columns:
+      - NP
+      - VEH
+      - worker_count
+      - HHT
+      - HINCP
+      - WGTP
+      - hh_id
+      - TEN
+  persons:
+    filename: synthetic_persons.csv
+    columns:
+      - AGEP
+      - SEX
+      - SCH
+      - is_worker
+      - hh_id
+      - per_num
+      - RAC1P
+
+
+# Steps for base mode
+# ------------------------------------------------------------------
+run_list:
+  steps:
+    - input_pre_processor
+    - setup_data_structures
+    - initial_seed_balancing
+    - meta_control_factoring
+    - final_seed_balancing
+    - integerize_final_seed_weights
+    - sub_balancing.geography=county_id
+    - expand_households
+    - summarize
+    - write_tables
+    - write_synthetic_population
+
+  #resume_after: expand_households

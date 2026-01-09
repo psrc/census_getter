@@ -1,0 +1,60 @@
+####################################################################
+# Census Getter Properties
+####################################################################
+
+
+
+# Census API Settings
+# ------------------------------------------------------------------
+
+# State, Counties & Year to get ACS data. Will use 5 year ACS by default. 
+state: 53
+counties: ['035', '033', '053', '061']
+census_year: 2021
+pums_year: 2021
+tract: None
+
+# Must create Env Variable holding census key. Put name of Var here:
+census_key: CENSUS_KEY
+
+controls_expression_file: census_getter_expressions.csv
+
+# Relate block groups with tracts
+hh_bg_size_attr: "B11001_001E"
+hh_tract_size_attr: "B08201_001E"
+pers_bg_size_attr: "B01001_001E"
+pers_tract_size_attr: "B01003_001E"
+
+# Local Data
+# ------------------------------------------------------------------
+# Provide non-Census data for use in expression files
+data_dir: data
+output_dir: data # put output tables in data dir for easy access by popsim
+
+input_table_list:
+
+pums_table_list:
+  - tablename: pums_hh
+    filename: psam_h53.csv
+  - tablename: pums_person
+    filename: psam_p53.csv
+  - tablename: puma_geog_lookup
+    filename: puma_geog_lookup_cnty.csv
+
+output_table_list:
+  - tablename: seed_households
+    filename: seed_households.csv
+  - tablename: seed_persons
+    filename: seed_persons.csv
+  - tablename: county_controls
+    filename: county_controls.csv
+
+nan_fill: 0
+
+# pypyr steps to run
+steps:
+ - census_getter.steps.puma_county_lookup
+ - census_getter.steps.pums_download
+ - census_getter.steps.prepare_pums
+ - census_getter.steps.get_acs_data
+ - census_getter.steps.write_tables
