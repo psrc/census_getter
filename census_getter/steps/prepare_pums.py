@@ -55,8 +55,10 @@ def prepare_pums(util):
     pums_hh['HINCP'] = pums_hh.HINCP * (pums_hh.ADJINC/1000000)
 
     # add county_id
-    pums_hh = pums_hh.merge(puma_geog_lookup[['PUMA','county_id']], on='PUMA', how='left')
-    pums_person = pums_person.merge(puma_geog_lookup[['PUMA','county_id']], on='PUMA', how='left')
+    if 'county_id' in puma_geog_lookup.columns:
+        puma_cnty = puma_geog_lookup.groupby('PUMA')['county_id'].first().reset_index()
+        pums_hh = pums_hh.merge(puma_cnty, on='PUMA', how='left')
+        pums_person = pums_person.merge(puma_cnty, on='PUMA', how='left')
     
     util.save_table("seed_persons", pums_person)
     util.save_table("seed_households", pums_hh)

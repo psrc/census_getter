@@ -42,16 +42,20 @@ def apply_acs_shares(util):
     spec = read_spec(expression_file_path)
 
     # get tables and merge into one dataframe
-    input_table_list = [util.settings['input_table_list'][i]['tablename'] for i in range(len(util.settings['input_table_list']))]
-    df = pd.DataFrame()
-    for table_name in input_table_list:
-        table = util.get_table(table_name)
-        # merge into one dataframe
-        df = df.merge(table, on='block_group_id', how='outer') if not df.empty else table
-    combined_acs = util.get_table('combined_acs')
-    df = df.merge(combined_acs, on='block_group_id', how='left')
-    df = df.set_index('block_group_id')
-    df = df.astype(float)
+    if util.settings['input_table_list'] is not None:
+        input_table_list = [util.settings['input_table_list'][i]['tablename'] for i in range(len(util.settings['input_table_list']))]
+        df = pd.DataFrame()
+    
+        for table_name in input_table_list:
+            table = util.get_table(table_name)
+            # merge into one dataframe
+            df = df.merge(table, on='block_group_id', how='outer') if not df.empty else table
+        combined_acs = util.get_table('combined_acs')
+        df = df.merge(combined_acs, on='block_group_id', how='left')
+    else:
+        combined_acs = util.get_table('combined_acs')
+        df = combined_acs.set_index('block_group_id')
+        df = df.astype(float)
     util.save_table('all_input_data', df)
 
     # evaluate expressions to create new columns
