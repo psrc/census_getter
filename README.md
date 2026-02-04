@@ -1,25 +1,43 @@
 # census_getter
+------------
 census_getter is a tool to get Census 5-year ACS data using an expression file. The expression file provides information to the program- each row specifies information about which variables should be retrieved and how they should be aggregated. Currently, this tool returns data at the block group level- data at the tract level is apportioned to the block group either by total households or total population, which is also specified in the expresson file. 
 
-Please see example_psrc/configs/census_getter_expressions to see how this file is set up. Also see example_psrc/configs/settings.yml for how to specify geographic area and census year. Future enhancements will provide more options for census geographies and census products.  
 
-Installation
+# Installation
 ------------
+1. Install uv
+    1. Open Powershell as administrator
+    2. Enter the following:    
+    ```
+    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+    ```
 
-1. Clone ths repository.
+2. Switch to CMD and clone the census_getter repository
+```
+git clone https://github.com/psrc/census_getter.git
+```
 
-2. Install [Anaconda Python 2.7](https://www.continuum.io/downloads). Anaconda Python is required for census_getter.
+3. Try running an example:
+Starting from the census_getter directory run:
+```
+uv sync
+.venv\Scripts\activate
+cd examples\psrc
+uv run run.py
+```
 
-3. Create and activate an Anaconda environment (basically a Python install just for this project)
-    * Run 'conda create -n census_getter python=2.7'
-    * Run 'activate census_getter' (you can re-use the environment on a later date by re-activating it or you can skip this step if you don't want to setup a new Python environment just for census_getter)
-   
-4. Get and install other required libraries, which can be found online.  Run the following commands on the activated conda Python environment:
-    * pip install [activitysim](https://pypi.python.org/pypi/activitysim)
-    * pip install [synthpop](https://github.com/UDST/synthpop)
-    
-5. Run census_getter.
-    * Navigate to census_getter/example_psrc directory. 
-    * Run`python run_census_getter.py`
-    
-6. Outputs are located in example_psrc/output.
+4. Setup and run a new example project
+    1. Create a new folder in census_getter\census_getter\examples
+    2. Copy configs directory from another example
+    3. Customize what ACS data to download in configs\census_getter_expressions.csv
+    4. Customize which steps to run and other settings in configs\settings.yaml
+    5. Run example using steps from above starting in the census_getter directory
+    ```
+    .venv\Scripts\activate
+    cd examples\new_example
+    uv run run.py
+    ```
+    6. Use -c argument if you want to use a different configs folder and settings.yaml:
+    ```
+    uv run run.py -c alt_configs_folder
+    ```

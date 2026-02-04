@@ -1,0 +1,52 @@
+target,geography,seed_table,importance,control_field,expression
+num_hh,block_group_id,households,1.00E+09,hh_bg_weight,(households.WGTP > 0) & (households.WGTP < np.inf)
+num_persons,block_group_id,persons,1.00E+09,pers_bg_weight,persons.hh_id>0
+hh_rent,block_group_id,households,5.00E+03,rent,households.TEN == 3
+hh_own,block_group_id,households,5.00E+03,own,households.TEN != 3
+hh_size_1,block_group_id,households,50000,hh_size_1,households.NP == 1
+hh_size_2,block_group_id,households,50000,hh_size_2,households.NP == 2
+hh_size_3,block_group_id,households,50000,hh_size_3,households.NP == 3
+hh_size_4,block_group_id,households,50000,hh_size_4,households.NP == 4
+hh_size_5,block_group_id,households,50000,hh_size_5,households.NP == 5
+hh_size_6,block_group_id,households,50000,hh_size_6,households.NP == 6
+hh_size_7_plus,block_group_id,households,50000,hh_size_7_plus,households.NP > 6
+cars_none,block_group_id,households,5000,cars_none,households.VEH == 0
+cars_one,block_group_id,households,5000,cars_one,households.VEH == 1
+cars_two,block_group_id,households,5000,cars_two,households.VEH == 2
+cars_three_or_more,block_group_id,households,5000,cars_three_or_more,households.VEH >= 3 
+male,block_group_id,persons,5000,male,persons.SEX == 1
+female,block_group_id,persons,5000,female,persons.SEX!=1
+workers_0,block_group_id,households,5000,workers_0,households.worker_count == 0
+workers_1,block_group_id,households,5000,workers_1,households.worker_count == 1
+workers_2,block_group_id,households,5000,workers_2,households.worker_count == 2
+workers_3_plus,block_group_id,households,5000,workers_3_plus,households.worker_count >= 3
+school_yes,block_group_id,persons,5000,school_yes,"persons.SCH.isin([2,3])"
+school_no,block_group_id,persons,5000,school_no,(persons.SCH != 2) & (persons.SCH != 3)
+is_family,block_group_id,households,5000,is_family,(households.HHT > 0) & (households.HHT <= 3)
+not_family,block_group_id,households,5000,not_family,households.HHT > 3
+age_5_and_under,block_group_id,persons,5000,age_5_and_under,persons.AGEP < 5
+age_5_to_9,block_group_id,persons,5000,age_5_to_9,(persons.AGEP >= 5) & (persons.AGEP <= 9)
+age_10_to_14,block_group_id,persons,5000,age_10_to_14,(persons.AGEP >=10) & (persons.AGEP <= 14)
+age_15_to_17,block_group_id,persons,5000,age_15_to_17,(persons.AGEP >=15) & (persons.AGEP <= 17)
+age_18_to_24,block_group_id,persons,5000,age_18_to_24,(persons.AGEP >=18) & (persons.AGEP <= 24)
+age_25_to_34,block_group_id,persons,5000,age_25_to_34,(persons.AGEP >=25) & (persons.AGEP <= 34)
+age_35_to_44,block_group_id,persons,5000,age_35_to_44,(persons.AGEP >=35) & (persons.AGEP <= 44)
+age_45_to_54,block_group_id,persons,5000,age_45_to_54,(persons.AGEP >=45) & (persons.AGEP <= 54)
+age_55_to_64,block_group_id,persons,5000,age_55_to_64,(persons.AGEP >=55) & (persons.AGEP <= 64)
+age_65_to_74,block_group_id,persons,5000,age_65_to_74,(persons.AGEP >=65) & (persons.AGEP <= 74)
+age_75_to_84,block_group_id,persons,5000,age_75_to_84,(persons.AGEP >=75) & (persons.AGEP <= 84)
+age_above_85,block_group_id,persons,5000,age_above_85,persons.AGEP >=85
+income_lt25,block_group_id,households,5000,income_lt25,households.HINCP < 25000
+income_gt25_lt50,block_group_id,households,5000,income_gt25_lt50,(households.HINCP >= 25000) & (households.HINCP < 50000)
+income_gt50_lt75,block_group_id,households,5000,income_gt50_lt75,(households.HINCP >= 50000) & (households.HINCP < 75000)
+income_gt75_lt100,block_group_id,households,5000,income_gt75_lt100,(households.HINCP >= 75000) & (households.HINCP < 100000)
+income_gt100_lt200,block_group_id,households,5000,income_gt100_lt200,(households.HINCP >= 100000) & (households.HINCP < 200000)
+income_gt200,block_group_id,households,5000,income_gt200,households.HINCP >= 200000
+is_worker,block_group_id,persons,5000,is_worker,persons.is_worker == 1
+white_hispanic,block_group_id,persons,5000,white_hispanic,(persons.RAC1P == 1) & (persons.HISP>1)
+non_white_hispanic,block_group_id,persons,5000,non_white_hispanic,(persons.RAC1P != 1) & (persons.HISP>1)
+white_non_hispanic,block_group_id,persons,5000,white_non_hispanic,(persons.RAC1P == 1) & (persons.HISP<2)
+black_non_hispanic,block_group_id,persons,5000,black_non_hispanic,(persons.RAC1P == 2) & (persons.HISP<2)
+other_non_hispanic,block_group_id,persons,5000,other_non_hispanic,(persons.RAC1P != 1) & (persons.RAC1P != 2) & (persons.RAC1P != 6) & (persons.RAC1P != 9) & (persons.HISP<2)
+asian_non_hispanic,block_group_id,persons,5000,asian_non_hispanic,(persons.RAC1P==6) & (persons.HISP<2)
+two_or_more_races_non_hispanic,block_group_id,persons,5000,two_or_more_races_non_hispanic,(persons.RAC1P==9) & (persons.HISP<2)

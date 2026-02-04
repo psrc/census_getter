@@ -1,0 +1,20 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+*.h5
+data/psam_h53.csv
+data/psam_p53.csv
+scratch.ipynb
+data/all_acs.csv
+data/all_input_data.csv
+data/combined_acs.csv
+data/seed_households.csv
+data/ofm_controls.csv
+data/seed_persons.csv

@@ -1,20 +1,8 @@
-import logging
 import os
-import re
-
 import pandas as pd
-import numpy as np
 
-from activitysim.core import inject
-from activitysim.core import pipeline
-from activitysim.core import assign
+from census_getter.util import Util
 
-
-from .. util import setting, create_block_group_id, create_full_block_group_id
-#from census_getter.util import create_block_group_id
-from ..census_helpers import Census
-
-logger = logging.getLogger(__name__)
 
 def read_spec(fname):
     cfg = pd.read_csv(fname, comment='#')
@@ -24,29 +12,65 @@ def read_spec(fname):
         cfg.description = ''
 
     cfg.target = cfg.target.str.strip()
+    cfg.target = cfg.target.replace('-', '_', regex=True)
     cfg.expression = cfg.expression.str.strip()
 
     return cfg
 
-@inject.step()
-def apply_acs_shares(settings, configs_dir):
-    expression_file_path = os.path.join(configs_dir, settings['apply_acs_shares_expression_file'])
+def eval_expressions(spec, df):
+    # for each row in spec, create new columns in df according to the expression
+    spec = spec.sort_values(by='target', ascending=True)
+    for index, row in spec.iterrows():
+        new_col_name = row['target']
+        # Remove 'df.' prefix from the expression
+        expression = row['expression'].replace('df.', '')
+        df.eval(f"{new_col_name} = {expression}", inplace=True, engine='python')
+    return df
+
+def tot_cols_to_list(df):
+    tot_cols = []
+    for col in df.columns:
+        if col[0] == '_':
+            tot_cols.append(col)
+    return tot_cols
+
+def apply_acs_shares(util):
+    # Load expression spec
+    data_dir = util.get_data_dir()
+    expression_file = util.settings['apply_acs_shares_expression_file']
+    expression_file_path = os.path.join(util.get_settings_path(), expression_file)
     spec = read_spec(expression_file_path)
 
-    for input_table in settings['input_table_list']:
-        tablename = input_table['tablename']
-        #create_full_block_group_id(tablename)
-
-        inject.broadcast(cast=tablename, onto='combined_acs', cast_on = 'block_group_id', onto_on='block_group_id')
-        
-    input_table_list = [settings['input_table_list'][i]['tablename'] for i in range(len(settings['input_table_list']))]
-    df = inject.merge_tables(target='combined_acs', tables=input_table_list + ['combined_acs'])
-    inject.add_table("all_input_data", df)
+    # get tables and merge into one dataframe
+    if util.settings['input_table_list'] is not None:
+        input_table_list = [util.settings['input_table_list'][i]['tablename'] for i in range(len(util.settings['input_table_list']))]
+        df = pd.DataFrame()
     
-    locals_d = {}
+        for table_name in input_table_list:
+            table = util.get_table(table_name)
+            # merge into one dataframe
+            df = df.merge(table, on='block_group_id', how='outer') if not df.empty else table
+        combined_acs = util.get_table('combined_acs')
+        df = df.merge(combined_acs, on='block_group_id', how='left')
+    else:
+        combined_acs = util.get_table('combined_acs')
+        df = combined_acs.set_index('block_group_id')
+        df = df.astype(float)
+    util.save_table('all_input_data', df)
 
-    results, trace_results, trace_assigned_locals = assign.assign_variables(spec, df, locals_d)
+    # evaluate expressions to create new columns
+    df = eval_expressions(spec, df)
+    df = util.fill_nan_values(df)
 
-    results = results.round(0)
+    # drop extra columns (totals) and round final values
+    tot_cols = tot_cols_to_list(df)
+    df = df.drop(columns=tot_cols).round(0)
 
-    inject.add_table("ofm_controls", results)
+    # save final dataframe
+    util.save_table('ofm_controls', df)
+
+def run_step(context):
+    print("Applying OFM shares to ACS data...")
+    util = Util(settings_path=context['configs_dir'])
+    apply_acs_shares(util)
+    return context

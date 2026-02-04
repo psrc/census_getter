@@ -1,86 +1,82 @@
-#PopulationSim
-#Contributions Copyright (C) by the contributing authors
-
-#Redistribution and use in source and binary forms, with or without
-#modification, are permitted provided that the following conditions are met:
-
-#* Redistributions of source code must retain the above copyright notice, this
-#  list of conditions and the following disclaimer.
-
-#* Redistributions in binary form must reproduce the above copyright notice,
-#  this list of conditions and the following disclaimer in the documentation
-#  and/or other materials provided with the distribution.
-
-#* Neither the name of [project] nor the names of its
-#  contributors may be used to endorse or promote products derived from
-#  this software without specific prior written permission.
-
-#THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-#AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-#IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-#DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-#FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-#DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-#SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-#CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-#OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-#OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-import logging
-
-from activitysim.core import inject
+import pandas as pd
+import yaml
+from pathlib import Path
+import os
 
 
-logger = logging.getLogger(__name__)
+class Util:
+    def __init__(self, settings_path='configs'):
+        """
+        Initialize Util with settings loaded from a YAML file.
+        """
+        self.settings_path = settings_path
+        
+        with open(f"{self.settings_path}/settings.yaml", 'r') as file:
+            self.settings = yaml.safe_load(file)
 
+        # create data and output directories if they don't exist
+        create_directory(path=self.get_data_dir())
+        create_directory(path=self.get_output_dir())
 
-def setting(key, default=None):
+    def get_settings_path(self):
+        # Returns the path to the settings directory
+        return self.settings_path
 
-    settings = inject.get_injectable('settings')
-
-    return settings.get(key, default)
-
-def create_block_group_id(my_table):
-    """ 
-    Inject standard ID column on state, county, tract, and block group values
-    Convert all to integers, then concat as string. 
-    """
+    def get_data_dir(self):
+        # Returns the data directory path from settings.yaml
+        return self.settings.get('data_dir', 'data')
     
-    t = inject.get_table(my_table)
-    df = t.to_frame(columns=['state', 'county', 'tract', 'block group'])
-    for col in df.columns:
-        df[col] = df[col].astype('int').astype('str')
-    s = df['state']+df['county']+df['tract']+df['block group']
-    inject.add_column(my_table, 'block_group_id', s)
+    def get_output_dir(self):
+        # Returns the output directory path from settings.yaml
+        return self.settings.get('output_dir', 'output')
 
-def create_full_block_group_id(my_table):
-    """ 
-    Inject standard ID column on state, county, tract, and block group values
-    Convert all to integers, then concat as string. 
-    """
+    def get_table_list(self):
+        # Returns a list of table names from settings.yaml
+        return self.settings.get('input_table_list', [])
     
-    t = inject.get_table(my_table)
-    df = t.to_frame(columns=['state', 'county', 'tract', 'block group'])
-    for col in df.columns:
-        df[col] = df[col].astype('str')
-    s = df['state']+df['county']+df['tract']+df['block group']
-    inject.add_column(my_table, 'block_group_id', s)
+    def get_output_table_list(self):
+        # Returns a list of output table names from settings.yaml
+        return self.settings.get('output_table_list', [])
 
-def data_dir_from_settings():
-    """
-    legacy strategy foir specifying data_dir is with orca injectable.
-    Calling this function provides an alternative by reading it from settings file
-    """
+    def get_table(self, table_name):
+        with pd.HDFStore(f"{self.get_data_dir()}/pipeline.h5", mode='r') as h5store:
+            return h5store.get(table_name)
 
-    # FIXME - not sure this plays well with orca
-    # it may depend on when file with orca decorator is imported
+    def save_table(self, table_name, df):
+        print(f"Saving table {table_name} to HDF5 store...")
+        with pd.HDFStore(f"{self.get_data_dir()}/pipeline.h5", mode='a') as h5store:
+            h5store.put(table_name, df, format='table')
 
-    data_dir = setting('data_dir', None)
+    def fill_nan_values(self, df):
+        if 'nan_fill' in self.settings:
+            df = df.fillna(self.settings['nan_fill'])
+        return df
+    
+    def create_full_block_group_id(self, df):
+        cols = ['state', 'county', 'tract', 'block group']
+        # concatenate to create full block group id using zfill to ensure proper lengths
+        df['block_group_id'] = df['state'].astype(str).str.zfill(2) + \
+                            df['county'].astype(str).str.zfill(3) + \
+                            df['tract'].astype(str).str.zfill(6) + \
+                            df['block group'].astype(str)
+        df = df.drop(columns=cols)
+        df['block_group_id'] = df['block_group_id'].astype('int64')
+        return df
 
-    if data_dir:
-        inject.add_injectable('data_dir', data_dir)
+    def block_group_id_exists(self, df):
+        return 'block_group_id' in df.columns
+
+    def convert_col_to_int64(self, df, col_name):
+        df[col_name] = df[col_name].astype('int64')
+        return df
+    
+def create_directory(path_parts: list=None, path: str=None) -> Path:
+    """Create a directory if it doesn't exist."""
+    if path_parts:
+        path = Path(os.path.join(*path_parts))
     else:
-        data_dir = inject.get_injectable('data_dir')
+        path_parts = path
 
-    logger.info("data_dir: %s" % data_dir)
-    return data_dir
+    if not os.path.exists(path):
+        os.makedirs(path)
+        print(f"Directory {path} created.")

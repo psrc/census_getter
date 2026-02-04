@@ -1,0 +1,25 @@
+target,geography,seed_table,importance,control_field,expression
+num_hh,county_id,households,1000000000,hh_bg_weight,(households.WGTP > 0) & (households.WGTP < np.inf)
+num_persons,county_id,persons,1000000000,pers_bg_weight,persons.hh_id>0
+male,county_id,persons,5000,male,persons.SEX == 1
+female,county_id,persons,5000,female,persons.SEX!=1
+age_5_and_under,county_id,persons,5000,age_5_and_under,persons.AGEP < 5
+age_5_to_9,county_id,persons,5000,age_5_to_9,(persons.AGEP >= 5) & (persons.AGEP <= 9)
+age_10_to_14,county_id,persons,5000,age_10_to_14,(persons.AGEP >=10) & (persons.AGEP <= 14)
+age_15_to_17,county_id,persons,5000,age_15_to_17,(persons.AGEP >=15) & (persons.AGEP <= 17)
+age_18_to_24,county_id,persons,5000,age_18_to_24,(persons.AGEP >=18) & (persons.AGEP <= 24)
+age_25_to_34,county_id,persons,5000,age_25_to_34,(persons.AGEP >=25) & (persons.AGEP <= 34)
+age_35_to_44,county_id,persons,5000,age_35_to_44,(persons.AGEP >=35) & (persons.AGEP <= 44)
+age_45_to_54,county_id,persons,5000,age_45_to_54,(persons.AGEP >=45) & (persons.AGEP <= 54)
+age_55_to_64,county_id,persons,5000,age_55_to_64,(persons.AGEP >=55) & (persons.AGEP <= 64)
+age_65_to_74,county_id,persons,5000,age_65_to_74,(persons.AGEP >=65) & (persons.AGEP <= 74)
+age_75_to_84,county_id,persons,5000,age_75_to_84,(persons.AGEP >=75) & (persons.AGEP <= 84)
+age_above_85,county_id,persons,5000,age_above_85,persons.AGEP >=85
+is_worker,county_id,persons,5000,is_worker,persons.is_worker == 1
+white_hispanic,county_id,persons,5000,white_hispanic,(persons.RAC1P == 1) & (persons.HISP>1)
+non_white_hispanic,county_id,persons,5000,non_white_hispanic,(persons.RAC1P != 1) & (persons.HISP>1)
+white_non_hispanic,county_id,persons,5000,white_non_hispanic,(persons.RAC1P == 1) & (persons.HISP<2)
+black_non_hispanic,county_id,persons,5000,black_non_hispanic,(persons.RAC1P == 2) & (persons.HISP<2)
+other_non_hispanic,county_id,persons,5000,other_non_hispanic,(persons.RAC1P != 1) & (persons.RAC1P != 2) & (persons.RAC1P != 6) & (persons.RAC1P != 9) & (persons.HISP<2)
+asian_non_hispanic,county_id,persons,5000,asian_non_hispanic,(persons.RAC1P==6) & (persons.HISP<2)
+two_or_more_races_non_hispanic,county_id,persons,5000,two_or_more_races_non_hispanic,(persons.RAC1P==9) & (persons.HISP<2)

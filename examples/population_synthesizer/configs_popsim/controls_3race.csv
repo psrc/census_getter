@@ -1,0 +1,38 @@
+target,geography,seed_table,importance,control_field,expression
+num_hh,block_group_id,households,1.00E+09,hh_bg_weight,(households.WGTP > 0) & (households.WGTP < np.inf)
+num_persons,block_group_id,persons,1.00E+09,pers_bg_weight,persons.hh_id>0
+hh_rent,block_group_id,households,5.00E+03,rent,households.TEN == 3
+hh_own,block_group_id,households,5.00E+03,own,households.TEN != 3
+hh_size_1,block_group_id,households,50000,hh_size_1,households.NP == 1
+hh_size_2,block_group_id,households,50000,hh_size_2,households.NP == 2
+hh_size_3,block_group_id,households,50000,hh_size_3,households.NP == 3
+hh_size_4,block_group_id,households,50000,hh_size_4,households.NP == 4
+hh_size_5,block_group_id,households,50000,hh_size_5,households.NP == 5
+hh_size_6,block_group_id,households,50000,hh_size_6,households.NP == 6
+hh_size_7_plus,block_group_id,households,50000,hh_size_7_plus,households.NP > 6
+cars_none,block_group_id,households,5000,cars_none,households.VEH == 0
+cars_one,block_group_id,households,5000,cars_one,households.VEH == 1
+cars_two_or_more,block_group_id,households,5000,cars_two_or_more,households.VEH > 2
+male,block_group_id,persons,5000,male,persons.SEX == 1
+female,block_group_id,persons,5000,female,persons.SEX!=1
+workers_0,block_group_id,households,5000,workers_0,households.worker_count == 0
+workers_1,block_group_id,households,5000,workers_1,households.worker_count == 1
+workers_2,block_group_id,households,5000,workers_2,households.worker_count == 2
+workers_3_plus,block_group_id,households,5000,workers_3_plus,households.worker_count >= 3
+school_yes,block_group_id,persons,5000,school_yes,"persons.SCH.isin([2,3])"
+school_no,block_group_id,persons,5000,school_no,(persons.SCH != 2) & (persons.SCH != 3)
+is_family,block_group_id,households,5000,is_family,(households.HHT > 0) & (households.HHT <= 3)
+not_family,block_group_id,households,5000,not_family,households.HHT > 3
+age_19_and_under,block_group_id,persons,5000,age_19_and_under,persons.AGEP <= 19
+age_20_to_35,block_group_id,persons,5000,age_20_to_35,(persons.AGEP > 19) & (persons.AGEP <= 35)
+age_35_to_60,block_group_id,persons,5000,age_35_to_60,(persons.AGEP >35) & (persons.AGEP <= 60)
+age_above_60,block_group_id,persons,5000,age_above_60,persons.AGEP > 60
+income_lt15,block_group_id,households,5000,income_lt15,households.HINCP <= 15000
+income_gt15-lt30,block_group_id,households,5000,income_gt15-lt30,(households.HINCP > 15000) & (households.HINCP <= 30000)
+income_gt30-lt60,block_group_id,households,5000,income_gt30-lt60,(households.HINCP > 30000) & (households.HINCP <= 60000)
+income_gt60-lt100,block_group_id,households,5000,income_gt60-lt100,(households.HINCP > 60000) & (households.HINCP <= 100000)
+income_gt100,block_group_id,households,5000,income_gt100,households.HINCP > 100000
+is_worker,block_group_id,persons,5000,is_worker,persons.is_worker == 1
+white,block_group_id,persons,5000,white,persons.RAC1P == 1
+black,block_group_id,persons,5000,black,persons.RAC1P == 2
+other,block_group_id,persons,5000,other,persons.RAC1P > 2
