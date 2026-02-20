@@ -53,6 +53,8 @@ def prepare_pums(util):
     # we are using 2021 5 year pums to have consistent PUMs geography (2010). 
     # adjust income to 2022. 
     pums_hh['HINCP'] = pums_hh.HINCP * (pums_hh.ADJINC/1000000)
+    # adjust home value
+    pums_hh['VALP'] = pums_hh['VALP'] * (pums_hh.ADJHSG/1000000)
 
     # add county_id
     if 'county_id' in puma_geog_lookup.columns:
