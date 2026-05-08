@@ -61,6 +61,15 @@ def prepare_pums(util):
         puma_cnty = puma_geog_lookup.groupby('PUMA')['county_id'].first().reset_index()
         pums_hh = pums_hh.merge(puma_cnty, on='PUMA', how='left')
         pums_person = pums_person.merge(puma_cnty, on='PUMA', how='left')
+
+    # add occupation group codes
+    occ_code_xwalk = {
+        11: 1113, 13: 1113, 15: 1517, 17: 1517, 19: 19, 21: 21, 23: 23, 25: 25,
+        27: 27, 29: 2931, 31: 2931, 33: 33, 35: 35, 37: 3739, 39: 3739, 41: 4143,
+        43: 4143, 45: 45, 47: 47, 49: 49, 51: 51, 53: 53, 55: 55
+    }
+    pums_person['SOCP_2digit'] = pums_person['SOCP'].str[:2].astype(float)
+    pums_person['occupation'] = pums_person['SOCP_2digit'].map(occ_code_xwalk)
     
     util.save_table("seed_persons", pums_person)
     util.save_table("seed_households", pums_hh)

@@ -27,25 +27,25 @@ def create_puma_county_lookup(util):
         [['county_id', 'geometry']]
     )
 
-    # download 2010 puma shapefile from tigerweb
-    puma10 = (
-        gpd.read_file('https://www2.census.gov/geo/tiger/TIGER2021/PUMA/tl_2021_53_puma10.zip')
-        .assign(puma10_id = lambda df: df['GEOID10'].astype(int))
-        .rename(columns={'PUMACE10':'PUMA'})
-        [['PUMA','puma10_id', 'geometry']]
+    # download puma shapefile from tigerweb
+    puma = (
+        gpd.read_file('https://www2.census.gov/geo/tiger/TIGER2025/PUMA20/tl_2025_53_puma20.zip')
+        .assign(puma_id = lambda df: df['GEOID20'].astype(int))
+        .rename(columns={'PUMACE20':'PUMA'})
+        [['PUMA','puma_id', 'geometry']]
     )
 
     # get centroids of pumas
-    puma10.geometry = puma10.representative_point()
+    puma.geometry = puma.representative_point()
 
     # spatial join pumas to counties
-    puma_cnty = gpd.sjoin(puma10, cnty, how='inner', predicate='within').drop(columns='index_right')
+    puma_cnty = gpd.sjoin(puma, cnty, how='inner', predicate='within').drop(columns='index_right')
 
     # create region column
     puma_cnty['region'] = 1
 
     # save to csv in data directory
-    puma_cnty[['PUMA','puma10_id','county_id','region']].to_csv(util.get_data_dir() + '/puma_geog_lookup_cnty.csv', index=False)
+    puma_cnty[['PUMA','puma_id','county_id','region']].to_csv(util.get_data_dir() + '/puma_geog_lookup_cnty.csv', index=False)
 
 
 def run_step(context):
