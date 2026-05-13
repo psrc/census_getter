@@ -5,19 +5,23 @@ census_getter is a tool to get Census 5-year ACS data using an expression file. 
 
 # Installation
 ------------
-1. Install uv
+1. Setup census api key as an env variable
+    - Get a free census api key here: https://api.census.gov/data/key_signup.html
+    - Save your api key as an env variable named CENSUS_KEY
+    
+2. Install uv
     1. Open Powershell as administrator
     2. Enter the following:    
     ```
     powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
     ```
 
-2. Switch to CMD and clone the census_getter repository
+3. Switch to CMD and clone the census_getter repository
 ```
 git clone https://github.com/psrc/census_getter.git
 ```
 
-3. Try running an example:
+4. Try running an example:
 Starting from the census_getter directory run:
 ```
 uv sync
@@ -26,7 +30,7 @@ cd examples\psrc
 uv run run.py
 ```
 
-4. Setup and run a new example project
+5. Setup and run a new example project
     1. Create a new folder in census_getter\census_getter\examples
     2. Copy configs directory from another example
     3. Customize what ACS data to download in configs\census_getter_expressions.csv
