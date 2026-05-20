@@ -15,13 +15,13 @@ pipelinerunner.run(f'{census_getter_configs_dir}/settings', dict_in={'configs_di
 #----------------------------------------------------------
 # Run populationsim
 #----------------------------------------------------------
-popsim_configs_dir = Path(__file__).parent / "configs_popsim"
-data_dir = Path(__file__).parent / "data"
-output_dir = Path(__file__).parent / "output"
+# popsim_configs_dir = Path(__file__).parent / "configs_popsim"
+# data_dir = Path(__file__).parent / "data"
+# output_dir = Path(__file__).parent / "output"
 
-returncode = subprocess.call([
-    ".venv/Scripts/python.exe", "-m", "populationsim", 
-    '--config', str(popsim_configs_dir),
-    '--data', str(data_dir),
-    '--output', str(output_dir)
-    ])
+# returncode = subprocess.call([
+#     ".venv/Scripts/python.exe", "-m", "populationsim", 
+#     '--config', str(popsim_configs_dir),
+#     '--data', str(data_dir),
+#     '--output', str(output_dir)
+#     ])

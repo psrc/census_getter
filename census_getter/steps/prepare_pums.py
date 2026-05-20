@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from census_getter.util import Util
 
 
@@ -69,8 +70,26 @@ def prepare_pums(util):
         43: 4143, 45: 45, 47: 47, 49: 49, 51: 51, 53: 53, 55: 55
     }
     pums_person['SOCP_2digit'] = pums_person['SOCP'].str[:2].astype(float)
-    pums_person['occupation'] = pums_person['SOCP_2digit'].map(occ_code_xwalk)
-    
+    pums_person['occupation'] = np.where(pums_person['is_worker'] == 1, pums_person['SOCP_2digit'].map(occ_code_xwalk), 0)
+
+    # add industry group codes
+    ind_code_xwalk = {
+        # agriculture, forestry, mining, construction
+        11: 1, 21: 1, 23: 1, 
+        # manufacturing, wholesale, transportation, warehousing, utilities
+        22:2, 31: 2, 32: 2, 33: 2, 42: 2, 48: 2, 49: 2,
+        # retail, accommodation, food services, arts, entertainment, other services
+        44: 3, 45: 3, 72: 3, 71: 3, 81: 3,
+        # information, finance, insurance, real estate, professional services
+        51: 4, 52: 4, 53: 4, 54: 4, 55: 4, 56: 4,
+        # government, education, health care, social assistance
+        61: 5, 62: 5, 63: 5, 92: 5
+    }
+    pums_person['NAICSP_2digit'] = pums_person['NAICSP'].str[:2].replace({'3M': '31','4M':'41'}).astype(float)
+    pums_person['aggr_industry'] = np.where(pums_person['is_worker'] == 1, pums_person['NAICSP_2digit'].map(ind_code_xwalk), 0)
+    # set any government worker to industry 5 regardless of naics code
+    pums_person.loc[pums_person['COW'].isin([3,4,5]), 'aggr_industry'] = 5
+
     util.save_table("seed_persons", pums_person)
     util.save_table("seed_households", pums_hh)
 

@@ -10,7 +10,7 @@
 # State, Counties & Year to get ACS data. Will use 5 year ACS by default. 
 state: 53
 counties: ['035', '033', '053', '061']
-census_year: 2023
+census_year: 2021
 pums_year: 2021
 tract: None
 
@@ -64,8 +64,8 @@ nan_fill: 0
 
 # pypyr steps to run
 steps:
- - census_getter.steps.pums_download
- - census_getter.steps.prepare_pums
+#  - census_getter.steps.pums_download
+#  - census_getter.steps.prepare_pums
  - census_getter.steps.load_data
  - census_getter.steps.get_acs_data
  - census_getter.steps.apply_acs_shares

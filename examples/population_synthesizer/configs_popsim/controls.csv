@@ -1,8 +1,8 @@
 target,geography,seed_table,importance,control_field,expression
-num_hh,block_group_id,households,1.00E+09,hh_bg_weight,(households.WGTP > 0) & (households.WGTP < np.inf)
-num_persons,block_group_id,persons,1.00E+09,pers_bg_weight,persons.hh_id>0
-hh_rent,block_group_id,households,5.00E+03,rent,households.TEN == 3
-hh_own,block_group_id,households,5.00E+03,own,households.TEN != 3
+num_hh,block_group_id,households,1000000000,hh_bg_weight,(households.WGTP > 0) & (households.WGTP < np.inf)
+num_persons,block_group_id,persons,1000000000,pers_bg_weight,persons.hh_id>0
+hh_rent,block_group_id,households,5000,rent,households.TEN == 3
+hh_own,block_group_id,households,5000,own,households.TEN != 3
 hh_size_1,block_group_id,households,50000,hh_size_1,households.NP == 1
 hh_size_2,block_group_id,households,50000,hh_size_2,households.NP == 2
 hh_size_3,block_group_id,households,50000,hh_size_3,households.NP == 3
@@ -50,3 +50,8 @@ black_non_hispanic,block_group_id,persons,5000,black_non_hispanic,(persons.RAC1P
 other_non_hispanic,block_group_id,persons,5000,other_non_hispanic,(persons.RAC1P != 1) & (persons.RAC1P != 2) & (persons.RAC1P != 6) & (persons.RAC1P != 9) & (persons.HISP<2)
 asian_non_hispanic,block_group_id,persons,5000,asian_non_hispanic,(persons.RAC1P==6) & (persons.HISP<2)
 two_or_more_races_non_hispanic,block_group_id,persons,5000,two_or_more_races_non_hispanic,(persons.RAC1P==9) & (persons.HISP<2)
+industry_1,block_group_id,persons,5000,industry_1,persons.aggr_industry==1
+industry_2,block_group_id,persons,5000,industry_2,persons.aggr_industry==2
+industry_3,block_group_id,persons,5000,industry_3,persons.aggr_industry==3
+industry_4,block_group_id,persons,5000,industry_4,persons.aggr_industry==4
+industry_5,block_group_id,persons,5000,industry_5,persons.aggr_industry==5
