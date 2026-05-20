@@ -50,8 +50,8 @@ black_non_hispanic,block_group_id,persons,5000,black_non_hispanic,(persons.RAC1P
 other_non_hispanic,block_group_id,persons,5000,other_non_hispanic,(persons.RAC1P != 1) & (persons.RAC1P != 2) & (persons.RAC1P != 6) & (persons.RAC1P != 9) & (persons.HISP<2)
 asian_non_hispanic,block_group_id,persons,5000,asian_non_hispanic,(persons.RAC1P==6) & (persons.HISP<2)
 two_or_more_races_non_hispanic,block_group_id,persons,5000,two_or_more_races_non_hispanic,(persons.RAC1P==9) & (persons.HISP<2)
-industry_1,block_group_id,persons,5000,industry_1,persons.aggr_industry==1
-industry_2,block_group_id,persons,5000,industry_2,persons.aggr_industry==2
-industry_3,block_group_id,persons,5000,industry_3,persons.aggr_industry==3
-industry_4,block_group_id,persons,5000,industry_4,persons.aggr_industry==4
-industry_5,block_group_id,persons,5000,industry_5,persons.aggr_industry==5
+aggr_industry_1,block_group_id,persons,5000,aggr_industry_1,persons.aggr_industry==1
+aggr_industry_2,block_group_id,persons,5000,aggr_industry_2,persons.aggr_industry==2
+aggr_industry_3,block_group_id,persons,5000,aggr_industry_3,persons.aggr_industry==3
+aggr_industry_4,block_group_id,persons,5000,aggr_industry_4,persons.aggr_industry==4
+aggr_industry_5,block_group_id,persons,5000,aggr_industry_5,persons.aggr_industry==5

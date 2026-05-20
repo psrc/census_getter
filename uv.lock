@@ -60,14 +60,10 @@ wheels = [
 
 [[package]]
 name = "census"
-version = "0.8.25"
-source = { registry = "https://pypi.org/simple" }
+version = "0.8.27"
+source = { git = "https://github.com/datamade/census.git#3da5a1068164c27f6e83815f5d28ec300e184fdf" }
 dependencies = [
     { name = "requests" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/98/8f/cdb1b8a7c210b4e2991d09e460cf8b2a36532c7e911d65bc8a6ba5dba8a0/census-0.8.25.tar.gz", hash = "sha256:433d3c280728d9c10ebfbf97df06c5911b6443a4ab5aa9a4e572af11e6d1a17c", size = 13074, upload-time = "2026-01-07T16:35:55.386Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9d/be/29054ec18c2dc99363f1e5a07bd3cee1b31cf04e2ca736a3b4926e96f00f/census-0.8.25-py3-none-any.whl", hash = "sha256:8396e71c92faa003b999c4a4f5996736047a148d34225b5347c47e255e81f344", size = 11421, upload-time = "2026-01-07T16:35:54.215Z" },
 ]
 
 [[package]]
@@ -88,7 +84,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "census" },
+    { name = "census", git = "https://github.com/datamade/census.git" },
     { name = "geopandas", specifier = ">=1.1.2" },
     { name = "numpy", specifier = ">1.23.4" },
     { name = "pandas" },
