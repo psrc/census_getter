@@ -2,7 +2,8 @@
 # Census Getter Properties
 ####################################################################
 
-
+# directory where Populationsim configs are located.
+configs_popsim: configs_popsim
 
 # Census API Settings
 # ------------------------------------------------------------------
@@ -64,9 +65,10 @@ nan_fill: 0
 
 # pypyr steps to run
 steps:
-#  - census_getter.steps.pums_download
-#  - census_getter.steps.prepare_pums
+ - census_getter.steps.pums_download
+ - census_getter.steps.prepare_pums
  - census_getter.steps.load_data
  - census_getter.steps.get_acs_data
  - census_getter.steps.apply_acs_shares
  - census_getter.steps.write_tables
+ - census_getter.steps.run_populationsim

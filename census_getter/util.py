@@ -23,12 +23,12 @@ class Util:
         return self.settings_path
 
     def get_data_dir(self):
-        # Returns the data directory path from settings.yaml
-        return self.settings.get('data_dir', 'data')
-    
+        # Returns the data directory path from settings.yaml, resolved relative to the settings path
+        return os.path.join(os.path.dirname(self.settings_path), self.settings.get('data_dir', 'data'))
+
     def get_output_dir(self):
-        # Returns the output directory path from settings.yaml
-        return self.settings.get('output_dir', 'output')
+        # Returns the output directory path from settings.yaml, resolved relative to the settings path
+        return os.path.join(os.path.dirname(self.settings_path), self.settings.get('output_dir', 'output'))
 
     def get_table_list(self):
         # Returns a list of table names from settings.yaml
