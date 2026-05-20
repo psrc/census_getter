@@ -19,7 +19,7 @@ def get_data(census_year, pums_table, state_id_str, state_abbr, util, overwrite=
         state_abbr (str): State abbreviation in lowercase.
         overwrite (bool): If True, delete existing file and download new one.
     """
-    data_dir = util.settings['data_dir']
+    data_dir = util.get_data_dir()
     file_name = f"psam_{pums_table}{state_id_str}.csv"
     file_path = os.path.join(data_dir, file_name)
 

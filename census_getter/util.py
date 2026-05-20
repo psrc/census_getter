@@ -14,8 +14,7 @@ class Util:
         with open(f"{self.settings_path}/settings.yaml", 'r') as file:
             self.settings = yaml.safe_load(file)
 
-        # create data and output directories if they don't exist
-        create_directory(path=self.get_data_dir())
+        # create output directory if it doesn't exist
         create_directory(path=self.get_output_dir())
 
     def get_settings_path(self):
