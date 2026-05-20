@@ -19,9 +19,18 @@ def run(args):
     print(f"Running control-totals pipeline with configs in: {configs_dir}")
     pipelinerunner.run(f'{configs_dir}/settings', dict_in={'configs_dir': configs_dir})
 
-if __name__ == '__main__':
+
+def build_parser():
     parser = argparse.ArgumentParser()
     add_run_args(parser)
-    args = parser.parse_args()
-    sys.exit(run(args))
+    return parser
+
+
+def main(argv=None):
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    return run(args)
+
+if __name__ == '__main__':
+    sys.exit(main())
 

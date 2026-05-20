@@ -24,6 +24,10 @@ census_getter is a tool to get Census 5-year ACS data using an expression file. 
 4. Try running an example:
 Starting from the census_getter directory run:
     ```
+    uv run census_getter run -c examples\population_synthesizer\configs_census_getter
+    ```
+    For direct script debugging, this still works:
+    ```
     uv run census_getter\run.py -c examples\population_synthesizer\configs_census_getter
     ```
 
@@ -33,6 +37,10 @@ Starting from the census_getter directory run:
     3. Customize what ACS data to download in configs_census_getter\census_getter_expressions.csv
     4. Customize which steps to run and other settings in configs_census_getter\settings.yaml
     5. Run example using steps from above starting in the census_getter directory
+        ```
+        uv run census_getter run -c examples\<example_dir>\configs_census_getter
+        ```
+        For direct script debugging:
         ```
         uv run census_getter\run.py -c examples\<example_dir>\configs_census_getter
         ```
