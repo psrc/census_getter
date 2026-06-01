@@ -108,6 +108,7 @@ output_synthetic_population:
       - hh_id
       - per_num
       - RAC1P
+      - aggr_industry
 
 
 # Steps for base mode
