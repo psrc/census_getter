@@ -55,3 +55,4 @@ aggr_industry_2,block_group_id,persons,5000,aggr_industry_2,persons.aggr_industr
 aggr_industry_3,block_group_id,persons,5000,aggr_industry_3,persons.aggr_industry==3
 aggr_industry_4,block_group_id,persons,5000,aggr_industry_4,persons.aggr_industry==4
 aggr_industry_5,block_group_id,persons,5000,aggr_industry_5,persons.aggr_industry==5
+aggr_industry_6,block_group_id,persons,5000,aggr_industry_6,persons.aggr_industry==6

@@ -82,13 +82,15 @@ def prepare_pums(util):
         44: 3, 45: 3, 72: 3, 71: 3, 81: 3,
         # information, finance, insurance, real estate, professional services
         51: 4, 52: 4, 53: 4, 54: 4, 55: 4, 56: 4,
-        # government, education, health care, social assistance
-        61: 5, 62: 5, 63: 5, 92: 5
+        # education, health care, social assistance
+        61: 5, 62: 5, 63: 5
     }
+    # fix 3M and 4M codes (manufacturing and retail that have not been assigned a 2 digit code in the PUMS data)
     pums_person['NAICSP_2digit'] = pums_person['NAICSP'].str[:2].replace({'3M': '31','4M':'41'}).astype(float)
+    # map industry codes to 1-5 using the ind_code_xwalk dict
     pums_person['aggr_industry'] = np.where(pums_person['is_worker'] == 1, pums_person['NAICSP_2digit'].map(ind_code_xwalk), 0)
-    # set any government worker to industry 5 regardless of naics code
-    pums_person.loc[pums_person['COW'].isin([3,4,5]), 'aggr_industry'] = 5
+    # set non education/healthcare government workers to industry 6
+    pums_person.loc[pums_person['COW'].isin([3,4,5]) & ~pums_person['aggr_industry'].isin([5]), 'aggr_industry'] = 6
 
     util.save_table("seed_persons", pums_person)
     util.save_table("seed_households", pums_hh)
