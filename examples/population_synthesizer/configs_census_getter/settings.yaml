@@ -68,11 +68,22 @@ nan_fill: 0
 
 # pypyr steps to run
 steps:
+# deletes the data/pipeline.h5 that census_getter uses to store intermediate data. 
+# Comment out if you want to keep intermediate data between runs.
+ - census_getter.steps.initialize_h5 
+# downloads the PUMS csv files using pums_year above
  - census_getter.steps.pums_download
+# cleans up the PUMS data and saves it is seed_persons and seed_households tables in data/pipeline.h5
  - census_getter.steps.prepare_pums
+# creates a lookup between PUMAs and block groups for PopSim to use later.
  - census_getter.steps.create_puma_geog_lookup
+# loads tables in table_list above to data/pipeline.h5
  - census_getter.steps.load_data
+# uses configs_census_getter/census_getter_expressions.csv to download ACS data from the API
  - census_getter.steps.get_acs_data
+# applies shares from ACS to OFM control totals
  - census_getter.steps.apply_acs_shares
+# saves tables in output_table_list above to csv files in output_dir from above
  - census_getter.steps.write_tables
+# runs PopSim with configs in configs_popsim will save outputs to "output" folder (not output_dir from above)
  - census_getter.steps.run_populationsim

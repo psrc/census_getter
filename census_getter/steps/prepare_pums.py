@@ -89,8 +89,11 @@ def prepare_pums(util):
     pums_person['NAICSP_2digit'] = pums_person['NAICSP'].str[:2].replace({'3M': '31','4M':'41'}).astype(float)
     # map industry codes to 1-5 using the ind_code_xwalk dict
     pums_person['aggr_industry'] = np.where(pums_person['is_worker'] == 1, pums_person['NAICSP_2digit'].map(ind_code_xwalk), 0)
+    # flag government workers
+    pums_person.loc[pums_person['is_worker'] == 1, 'gov_worker'] = 0
+    pums_person.loc[(pums_person['is_worker'] == 1) & (pums_person['COW'].isin([3,4,5])), 'gov_worker'] = 1
     # set non education/healthcare government workers to industry 6
-    pums_person.loc[pums_person['COW'].isin([3,4,5]) & ~pums_person['aggr_industry'].isin([5]), 'aggr_industry'] = 6
+    pums_person.loc[(pums_person['gov_worker'] == 1) & (pums_person['aggr_industry'] != 5), 'aggr_industry'] = 6
 
     util.save_table("seed_persons", pums_person)
     util.save_table("seed_households", pums_hh)

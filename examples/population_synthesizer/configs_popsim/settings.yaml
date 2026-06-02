@@ -104,12 +104,15 @@ output_synthetic_population:
       - AGEP
       - SEX
       - SCH
-      - is_worker
       - hh_id
       - per_num
       - RAC1P
-      - aggr_industry
       - JWTRNS
+      - is_worker
+      - gov_worker
+      - aggr_industry
+      - occupation
+      - work_from_home
 
 
 # Steps for base mode
